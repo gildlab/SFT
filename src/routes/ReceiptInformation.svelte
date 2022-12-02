@@ -1,10 +1,11 @@
 <script>
     import {createEventDispatcher, onMount} from "svelte";
     import {activeNetwork, vault} from "../scripts/store.js";
-    import {getReceiptBalance, getSubgraphData, hexToString, isUrl, toSentenceCase} from "../scripts/helpers.js";
-    import {RECEIPT_INFORMATION_QUERY} from "../scripts/queries.js";
-    import axios from "axios";
-    import {IPFS_GETWAY, ONE} from "../scripts/consts.js";
+    import {
+        getReceiptBalance,
+        formatReceiptData,
+        isUrl,
+    } from "../scripts/helpers.js";
     import {icons} from "../scripts/assets.js";
     import {ethers} from "ethers";
 
@@ -17,35 +18,13 @@
 
     onMount(async () => {
         receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receipt.receiptId);
-        console.log(receiptBalance);
-        await getReceiptData(receipt)
+        loading = true
+        if (receipt.receipt.receiptInformations.length) {
+            displayInformation = await formatReceiptData(receipt.receipt.receiptInformations[0].information)
+        }
+        loading = false
     })
 
-    async function getReceiptData(receipt) {
-        loading = true;
-        let variables = {id: receipt.receipt.id}
-        let resp = await getSubgraphData($activeNetwork, variables, RECEIPT_INFORMATION_QUERY, 'receipt')
-        let receiptInfo = ""
-        let byteInfo = ""
-
-        if (resp && resp.data && resp.data.receipt) {
-            receiptInfo = resp.data.receipt.receiptInformations
-            if (receiptInfo.length) {
-                byteInfo = receiptInfo[0].information
-                let infoHash = hexToString(byteInfo.slice(2))
-                let res = await axios.get(`${IPFS_GETWAY}/${infoHash}`);
-                if (res) {
-                    receiptInformations = res.data
-                    displayInformation = Object.keys(receiptInformations).map(prop => {
-                        return {
-                            label: toSentenceCase(prop),
-                            value: receiptInformations[prop]
-                        }
-                    })
-                }
-            }
-        }
-    }
 
     const dispatch = createEventDispatcher();
 

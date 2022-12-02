@@ -1,5 +1,6 @@
 import {ethers} from "ethers";
-import {ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
+import axios from "axios";
 
 export async function getEventArgs(tx, eventName, contract) {
     return contract.interface.decodeEventLog(eventName, (
@@ -193,4 +194,20 @@ export async function getReceiptBalance(activeNetwork, vault, receipt) {
         receiptBalance = res.data.receiptBalance.valueExact
     }
     return ethers.BigNumber.from(receiptBalance)
+}
+
+export async function formatReceiptData(information) {
+        let displayInformation = [];
+            let infoHash = hexToString(information.slice(2))
+            let res = await axios.get(`${IPFS_GETWAY}/${infoHash}`);
+            if (res) {
+                let receiptInformations = res.data
+                displayInformation = Object.keys(receiptInformations).map(prop => {
+                    return {
+                        label: toSentenceCase(prop),
+                        value: receiptInformations[prop]
+                    }
+                })
+            }
+        return displayInformation
 }

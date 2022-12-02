@@ -3,16 +3,45 @@
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import {navigateTo} from "yrv";
     import Spinner from "../components/Spinner.svelte";
-    import {activeNetwork, selectedReceipt} from "../scripts/store.js";
+    import {activeNetwork, selectedReceipt, vault} from "../scripts/store.js";
     import {ethers} from "ethers";
-    import {timeStampToDate} from "../scripts/helpers.js";
+    import {formatReceiptData, getReceiptBalance, isUrl, timeStampToDate} from "../scripts/helpers.js";
+    import {onMount} from "svelte";
+    import {icons} from "../scripts/assets.js";
 
     let receipt = $selectedReceipt.receipt;
     let loading = false
     let checkedReceipts = []
+    let receiptInformation = []
+    let receiptBalance = ""
+    let transactions = []
 
     function getHash(id) {
         return id.split('-')[1]
+    }
+
+    onMount(async () => {
+        await setReceiptData(receipt.id)
+        await mergeDepositsAndWithdraws()
+        receiptBalance = await getReceiptBalance($activeNetwork, $vault, receipt.receiptId);
+    })
+
+    async function setReceiptData() {
+        loading = true
+        if (receipt.receiptInformations.length) {
+            receiptInformation = await formatReceiptData(receipt.receiptInformations[0].information)
+        }
+        loading = false
+    }
+
+    async function mergeDepositsAndWithdraws() {
+        let deposits = receipt.deposits;
+        let withdraws = receipt.withdraws.map(w => {
+            return {...w, withdraw: true}
+        });
+
+        transactions = [...deposits,...withdraws]
+
     }
 </script>
 <DefaultFrame header={`Audit History > ${receipt.receiptId}`}>
@@ -22,26 +51,39 @@
   <div slot="content">
     <div class="history">
       <div class="receipts">
-        {#if (receipt.receiptInformations.length)}
-          <table>
-            <tbody>
-            {#each receipt.receiptInformations as info}
-              <tr class="tb-row">
-                <td>{info.key}</td>
-                <td>{info.value}</td>
-              </tr>
-            {/each}
-            </tbody>
-          </table>
+        {#if (receiptInformation.length)}
+          {#each receiptInformation as info}
+            <div class="receipt-info">
+              {#if isUrl(info.value)}
+                  <span>{info.label}
+                    <a href={info.value} target="_blank">
+                          <img src="{icons.show}" alt="view file" class="btn-hover">
+                    </a>
+                  </span>
+              {/if}
+
+              {#if !isUrl(info.value)}
+                <span>{info.label}</span>
+                <div>{info.value}</div>
+              {/if}
+            </div>
+
+          {/each}
+
         {/if}
-        {#if (!receipt.receiptInformations.length)}
-          <div class="no-data">Nothing to show</div>
-        {/if}
+        <div class="receipt-info">
+          <span class="f-weight-700">Total token amount</span>
+          <div class="date f-weight-700">{receiptBalance ? ethers.utils.formatUnits(receiptBalance) : ''}</div>
+        </div>
       </div>
       <div class="receipts-table-container">
         {#if loading}
           <Spinner></Spinner>
         {/if}
+        <div class="transactions">
+          <span class="f-weight-700">Transaction History</span>
+          <button class="default-btn">Compare Changes</button>
+        </div>
         {#if !loading}
           <table class="receipts-table">
             <tr>
@@ -50,22 +92,23 @@
               <td class="f-weight-700">Date</td>
               <td class="f-weight-700">Transaction Hash</td>
             </tr>
-            {#each receipt.deposits as deposit}
+            {#each transactions as transaction}
               <tr>
                 <td>
                   <label class="check-container">
                     <input type="checkbox" class="check-box" bind:group={checkedReceipts}
-                           value={deposit.id}/>
+                           value={transaction.id}/>
                     <span class="checkmark"></span>
                   </label>
                 </td>
                 <td class="receipt-id">
-                  <div class="check-box-label btn-hover">{ethers.utils.formatUnits(deposit.amount, 18)}</div>
+
+                  <div class="check-box-label btn-hover">{ethers.utils.formatUnits(transaction.amount, 18)}</div>
                 </td>
-                <td class="value">{timeStampToDate(deposit.timestamp)} </td>
+                <td class="value">{timeStampToDate(transaction.timestamp)} </td>
                 <td class="value">
-                  <a href="{`${$activeNetwork.blockExplorer}tx/${getHash(deposit.id)}`}" target="_blank">
-                    {getHash(deposit.id).replace(/(.{6}).*(.{6})/, "$1…$2") || ""}
+                  <a href="{`${$activeNetwork.blockExplorer}tx/${getHash(transaction.id)}`}" target="_blank">
+                    {getHash(transaction.id).replace(/(.{6}).*(.{6})/, "$1…$2") || ""}
                   </a>
                 </td>
               </tr>
@@ -114,6 +157,8 @@
         min-height: 100px;
         border-bottom: 1px solid #D2D2D2;
         overflow: auto;
+        text-align: center;
+        padding: 0 25% 20px 25%;
     }
 
     .receipts table th {
@@ -141,8 +186,25 @@
         text-decoration: none;
         color: inherit;
     }
-    a:hover{
+
+    a:hover {
         text-decoration: underline;
     }
 
+    .receipt-info {
+        padding: 2px 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .transactions {
+        margin-top: 25px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .checkmark {
+        top: -6px
+    }
 </style>

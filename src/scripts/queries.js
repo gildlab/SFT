@@ -48,14 +48,20 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             {
               receipt
               {
+                id
                 receiptId,
                   receiptInformations{
                     information
                   }
-                  deposits{
+                  deposits(orderBy:timestamp){
                      amount
                      timestamp
                      id
+                  }
+                  withdraws(orderBy:timestamp){
+                    amount
+                    timestamp
+                    id
                   }
               },
               timestamp,
@@ -86,6 +92,9 @@ export const DEPOSITS_QUERY = `
                     balances {
                       value,
                       valueExact
+                    },
+                    receiptInformations{
+                       information
                     }
                   },
                 }
@@ -98,16 +107,6 @@ export const DEPLOYER_QUERY = `
             offchainAssetReceiptVault(id: $id) {
                 deployer,
                 totalShares
-            }
-          }
-         `
-export const RECEIPT_INFORMATION_QUERY = `
-          query($id: ID!) {
-            receipt(id: $id) {
-                id,
-                  receiptInformations{
-                    information
-                  }
             }
           }
          `

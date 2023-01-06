@@ -26,15 +26,17 @@ body {
     display: flex;
     min-width: 320px;
     min-height: 100vh;
-    background: rgb(181,220,255);
-    background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);
+    background: #f0eff1;
+    /*background: rgb(181,220,255);*/
+    /*background: linear-gradient(0deg, #b5dcff 0%, #6f5ea1 100%);*/
 }
 
 #app {
     text-align: center;
     width: 100%;
-    margin-top: 52px;
+    /*margin-top: 52px;*/
     font-family: 'Mukta', sans-serif;
+    background: #f0eff1;
 }
 
 .space-between {
@@ -300,10 +302,7 @@ button:focus, button:focus-visible {
 }
 
 .tb-row:hover {
-    background: #625e91;
-    color: #ffffff;
     cursor: pointer;
-    opacity: 0.7;
 }
 
 .right {

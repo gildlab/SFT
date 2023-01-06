@@ -13,6 +13,7 @@ import success_circle from '../assets/icons/success_circle.svg'
 import burger from '../assets/icons/burger.svg'
 import gild_lab from '../assets/icons/gild_lab.svg'
 import rain from '../assets/icons/rain.svg'
+import expand_double from '../assets/icons/expand_double.svg'
 
 export const icons = {
     ethereum,
@@ -29,5 +30,6 @@ export const icons = {
     success_circle,
     burger,
     gild_lab,
-    rain
+    rain,
+    expand_double
 }

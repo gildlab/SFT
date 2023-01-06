@@ -1,11 +1,11 @@
 <script>
-    import {activeNetwork, auditHistory, ethersData, tokens, vault} from "../scripts/store.js";
+    import {activeNetwork, auditHistory, ethersData, tokenName, tokens, vault} from "../scripts/store.js";
     import {getContract, getSubgraphData} from "../scripts/helpers.js";
     import contractAbi from "../contract/OffchainAssetVaultAbi.json";
-    import {navigateTo} from "yrv";
     import {AUDIT_HISTORY_DATA_QUERY} from "../scripts/queries.js";
     import DefaultFrame from "../components/DefaultFrame.svelte";
     import SftLoader from "../components/SftLoader.svelte";
+    import {navigate} from "svelte-routing";
 
 
     async function handleTokenSelect(token) {
@@ -15,8 +15,9 @@
             localStorage.setItem("vaultAddress", token.address)
             let auditHistoryData = await getAuditHistoryData(token.address)
             auditHistory.set(auditHistoryData)
-            navigateTo("#roles")
-
+            let temp = $tokens.find(t=>t.address === token.address)
+            tokenName.set(temp?.name)
+            navigate("/roles")
         }
     }
 

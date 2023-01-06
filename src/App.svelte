@@ -1,9 +1,11 @@
 <script>
     import Default from "./lib/Default.svelte";
+    import DefaultCopy from "./lib/DefaultCopy.svelte";
 </script>
 
 <main>
-  <Default/>
+<!--  <Default/>-->
+  <DefaultCopy/>
 </main>
 
 <style>

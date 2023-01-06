@@ -23,6 +23,7 @@
     "json-format-highlight": "^1.0.4",
     "lodash-es": "^4.17.21",
     "sv-bootstrap-dropdown": "^0.4.4",
+    "svelte-routing": "^1.6.0",
     "yrv": "^0.0.57"
   }
 }

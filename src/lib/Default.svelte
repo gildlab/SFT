@@ -18,6 +18,7 @@
     import NewSchema from "../routes/NewSchema.svelte";
     import SetVault from "../routes/SetVault.svelte";
     import ReceiptAudit from "../routes/ReceiptAudit.svelte";
+    import AssetRegister from "../routes/AssetRegister.svelte";
 
     let connectedAccount;
     let tokenName = '';
@@ -120,6 +121,13 @@
             displayName: "Audit History",
             action: () => {
                 navigateTo('#audit-history', {replace: false})
+            }
+        },
+        {
+            id: "asset-register",
+            displayName: "Asset Register",
+            action: () => {
+                navigateTo('#asset-register', {replace: false})
             }
         },
         // {
@@ -320,6 +328,7 @@
       {/if}
 
     </div>
+
     {#if !$account}
       <div>
         <div class="invalid-network f-weight-700">
@@ -336,6 +345,8 @@
       </div>
     {/if}
     {#if $account}
+      <Route path="#asset-register" component={AssetRegister}/>
+
       <div class="main-card">
         <div class={$activeNetwork  ? 'show' : 'hide'}>
           <Route path="#setup" component={SftSetup} ethersData={$ethersData}/>
@@ -346,6 +357,7 @@
           <Route path="#set-vault" component={SetVault}/>
           <Route path="#new-schema" component={NewSchema}/>
           <Route path="#receipt/:id" component={ReceiptAudit}/>
+
 
           <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>
             <div class="tab-buttons">
@@ -371,6 +383,7 @@
       </div>
     {/if}
   </div>
+
 
   <div class="footer">
     <div class="powered-by">

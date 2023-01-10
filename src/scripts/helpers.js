@@ -1,5 +1,5 @@
 import {ethers} from "ethers";
-import {IPFS_GETWAYS, ONE, ROLES} from "./consts.js";
+import {IPFS_GETWAY, ONE, ROLES} from "./consts.js";
 import axios from "axios";
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -210,12 +210,13 @@ export async function hasRole(vault, account, role) {
 }
 
 export async function getIpfsGetWay(hash) {
-    let err = ""
-    const requestArr = IPFS_GETWAYS.map((url, i) => {
-        return axios.get(`${url}/${hash}`);
-    });
-    let resp = await Promise.any(requestArr).catch((er) => {
-        err = er || "Something went wrong"
-    })
-    return resp.config.url || err
+    try {
+        const response = await axios.get(`${IPFS_GETWAY}/${hash}`);
+        if (response) {
+            return response?.config.url
+        }
+    } catch (err) {
+        console.log(err)
+        return err
+    }
 }

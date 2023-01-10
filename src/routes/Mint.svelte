@@ -161,7 +161,7 @@
         })
 
         if ($fileHash) {
-            json.pie_certificate = await getIpfsGetWay($fileHash)//`${IPFS_GETWAY}/${$fileHash}`
+            json.pie_certificate = $fileHash
         }
 
         let formFields = Object.keys(json)

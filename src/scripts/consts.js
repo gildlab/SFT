@@ -23,8 +23,9 @@ export const ROLES = [
     {name: "CONFISCATOR_ADMIN", hash: "0xc23bede8eabca44a15d0193051ac5429f3d014a7e297a4e78f67d06657d14269"}
 ]
 export const IPFS_APIS = [
-    "https://gildlab-ipfs.in.ngrok.io/api/v0/add?pin=true&to-files=", //Nino
-    "https://aa8506a17c44.ngrok.io/api/v0/add?pin=true&to-files=", //Vishal
-    "https://3949-212-58-103-255.ngrok.io/api/v0/add?pin=true&to-files=", //Nino Windows
+    "https://gildlab-ipfs-0.in.ngrok.io/api/v0/add?pin=true&to-files=", //Vishal
+    "https://gildlab-ipfs-2.eu.ngrok.io/api/v0/add?pin=true&to-files=", //David A Box1
+    "https://gildlab-ipfs-4.eu.ngrok.io/api/v0/add?pin=true&to-files=", //Nino
+    "https://gildlab-ipfs-5.eu.ngrok.io/api/v0/add?pin=true&to-files=", //David A Box2
 ]
-export const IPFS_GETWAYS = ["https://gildlab-ipfs.in.ngrok.io/ipfs", "https://aa8506a17c44.ngrok.io/ipfs", "https://3949-212-58-103-255.ngrok.io/ipfs"]
+export const IPFS_GETWAY = "https://ipfs.io/ipfs/"

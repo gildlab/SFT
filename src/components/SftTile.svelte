@@ -136,7 +136,7 @@
     </tr>
     <tr>
       <td class="font-bold align-text-top">Name of auditor(s)</td>
-      <td class="sft-info ">
+      <td class="sft-info">
         {#if !auditors.length}
           <div>N/A</div>
         {/if}
@@ -150,7 +150,7 @@
     </tr>
     <tr>
       <td class="font-bold">Name of issuer</td>
-      <td class="sft-info ">
+      <td class="sft-info">
         {#if !issuers.length}
           <div>N/A</div>
         {/if}

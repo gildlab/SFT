@@ -1,0 +1,46 @@
+name: Linkinator
+
+on:
+  [ push ]
+
+jobs:
+  set-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.envdev.outputs.environment }}${{ steps.envprod.outputs.environment }}
+    steps:
+      - name: Set environment to staging
+        if: endsWith(github.ref, '/develop')
+        id: envdev
+        run: echo "environment=staging" >> $GITHUB_OUTPUT
+      - name: Set environment to prod
+        if: endsWith(github.ref, '/main')
+        id: envprod
+        run: echo "environment=production" >> $GITHUB_OUTPUT
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    container: fleek/svelte:node-16
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install depdendencies
+        run: npm install --pure-lockfile
+      - name: Build
+        run: npm run build --mode ${{ needs.set-environment.outputs.environment }}
+      - name: Activate Fleek
+        env:
+          FLEEK_FILE: ${{ needs.set-environment.outputs.environment }}
+        run: mv .fleek.json
+      - name: Deploy through Fleek
+        id: deploy
+        uses: fleekhq/action-deploy@v1.0.1
+        with:
+          apiKey: ${{ secrets.FLEEK_API_KEY }}
+          workDir: ${{ env.working-directory }}
+      - name: Get the Fleek output url
+        run: echo "The Fleek deploy url is ${{ steps.deploy.outputs.deployUrl }}"

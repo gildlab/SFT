@@ -1,0 +1,16 @@
+{
+  "site": {
+    "id": "f6bbc70a-5085-46a1-9c67-a0e34c202f1a",
+    "team": "Nino Keldishvili's Team",
+    "platform": "ipfs",
+    "source": "ipfs",
+    "name": "old-silence-8420"
+  },
+  "build": {
+    "baseDir": "",
+    "publicDir": "dist",
+    "rootDir": "",
+    "command": "npm install && npm run build",
+    "image": "fleek/svelte:node-16"
+  }
+}

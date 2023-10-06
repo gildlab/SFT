@@ -8,6 +8,7 @@
     import {navigate} from '../scripts/helpers.js';
 
     export let schema = {}
+    export let title = 'Asset info.'
     const dispatch = createEventDispatcher();
     let username = '';
     let password = '';
@@ -94,7 +95,7 @@
 
 </script>
 {#if schema?.displayName}
-  <span class="title f-weight-700">Asset info.</span>
+  <span class="title f-weight-700">{title}</span>
 
   <SchemaForm schema={schema.schema}></SchemaForm>
   <div class="error">{$schemaError}</div>
@@ -105,8 +106,3 @@
   {/if}
 {/if}
 
-<style>
-    .title {
-        text-align: center;
-    }
-</style>

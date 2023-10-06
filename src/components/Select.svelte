@@ -9,6 +9,7 @@
     export let staticLabel = '';
     export let className;
     export let dropDownClass = '';
+    export let width = '';
     export let expandIcon = icons.expand;
     let selected;
 
@@ -33,17 +34,17 @@
     }
 
 </script>
+<div class="relative">
 
-<div>
   <Dropdown triggerElement={dropdownTrigger}>
-
     <button
       type="button"
       class={`${className} inputSelect btn dropdown-toggle`}
       bind:this={dropdownTrigger}
+      style="{`width : ${width}px`}"
     >
       <slot name="icon"></slot>
-      <span class="select-label">{selected && !staticLabel ? selected : label}</span>
+      <span class="select-label-btn">{selected && !staticLabel ? selected : label}</span>
       {#if showExpand}
         <img class="expand" src={expandIcon} alt="expand"/>
       {/if}
@@ -59,10 +60,16 @@
         </button>
       {/each}
     </div>
+
   </Dropdown>
 </div>
+
 <style>
     /*@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");*/
+
+    .relative {
+        width: fit-content;
+    }
 
     .btn:focus {
         outline: none;
@@ -85,9 +92,15 @@
         margin-left: 17px;
     }
 
-    .select-label {
+    .select-label-btn{
         margin-left: 10px;
+
+    }
+
+    .select-label, .select-label-btn {
         width: calc(100% - 15px);
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .nav-dropdown .dropdown-item {
@@ -149,6 +162,7 @@
         font-size: 16px;
         line-height: 25px;
         color: #000000;
+        width: 100%;
     }
 
     .inputSelect.dropdown {
@@ -156,6 +170,8 @@
         height: auto;
         overflow: auto;
         background-color: #ececec;
+        /*min-width: 360px;*/
+        /*max-width: 360px;*/
         overflow-x: hidden;
     }
 
@@ -165,7 +181,7 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 27px;
-        padding: 1px 0 !important;
+        padding: 1px 10px !important;
     }
 
     .dropdown-item:focus, .dropdown-item:hover {

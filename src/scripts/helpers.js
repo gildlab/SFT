@@ -15,6 +15,7 @@ import {
 } from "./store.js";
 import {ACCOUNT_PINS_QUERY, VAULT_INFORMATION_QUERY} from "./queries.js";
 import {navigateTo} from 'yrv';
+import jQuery from 'jquery';
 
 
 export async function getEventArgs(tx, eventName, contract) {
@@ -633,4 +634,83 @@ export async function getAccountPins(network, address) {
         }
         return pins
     }
+}
+
+export async function getFormData(fileHashes) {
+    //get form data
+    let formDataArr = jQuery(".svelte-schema-form").serializeArray()
+    const json = {};
+    formDataArr.map(a => {
+        json[a.name] = a.value
+    })
+    if (fileHashes.length) {
+        fileHashes.map(data => {
+            json[data.prop] = data.hash
+        })
+    }
+    let formFields = Object.keys(json)
+
+    let formNotEmpty = formFields.some(f => json[f] !== "")
+    let response = null;
+    if (formNotEmpty) {
+        response = JSON.stringify(json)
+    }
+
+    return response
+}
+
+export function setFormInputs(values, fileHashes) {
+    // Get all input elements inside the form with the class "svelte-schema-form"
+    const formInputs = document.querySelectorAll('.svelte-schema-form input');
+    // Iterate over the input elements and reset their values
+    formInputs.forEach(input => {
+        if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.type === 'date' ||
+            input.type === 'number') {
+
+            if (!values) {
+                input.value = '';
+            } else {
+                input.value = values[input.id];
+            }
+        } else if (input.type === 'file') {
+
+            if (values) {
+                fileHashes = [...fileHashes, {prop: input.id, hash: values[input.id]} ]
+                const linkURL = values[input.id] ? IPFS_GETWAY + values[input.id]: null;
+
+                // Create the link (<a>) element
+                if(linkURL){
+                    const linkElement = document.createElement('a');
+                    linkElement.href = linkURL ;
+                    linkElement.target = '_blank';
+                    linkElement.classList.add('display-flex');
+                    linkElement.classList.add('absolute');
+                    linkElement.classList.add('right-0');
+                    linkElement.classList.add('file-link');
+                    linkElement.innerHTML = 'original&nbsp;'
+
+                    // Create the image (<img>) element
+                    const spanElement = document.createElement('span');
+                    spanElement.textContent =  toSentenceCase(input.id)//+ toSentenceCase(input.id)
+                    spanElement.classList.add('underline');
+
+
+                    // Append the image element to the link element
+                    linkElement.appendChild(spanElement);
+
+                    // Append the link element to the container
+                    input.parentNode.appendChild(linkElement);
+                }
+
+            } else {
+                const fileLinks = document.getElementsByClassName('file-link')
+                for (let i = 0; i < fileLinks.length; i++) {
+                    fileLinks[i].classList.add('hide');
+                }
+            }
+
+        }
+    });
+
+    return fileHashes
 }

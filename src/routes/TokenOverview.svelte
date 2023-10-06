@@ -326,7 +326,6 @@
     .token-overview-container {
         background: #FFFFFF;
         border-radius: 20px 20px 0 0;
-        margin-top: 103px;
         margin-right: 102px;
         color: #000000;
         display: flex;

@@ -7,6 +7,7 @@ export const QUERY = `
                 deployer
                 admin
                 name
+                certifiedUntil
                 symbol
                 deployTimestamp
                 receiptContractAddress
@@ -59,6 +60,7 @@ export const AUDIT_HISTORY_DATA_QUERY = `
             id,
             address,
             totalShares,
+            certifiedUntil
             receiptContractAddress
             certifications(orderBy: timestamp, orderDirection: desc)
             {
@@ -67,6 +69,8 @@ export const AUDIT_HISTORY_DATA_QUERY = `
               {
                 address
               },
+              id
+              data
               certifiedUntil,
               totalShares
                 transaction {
@@ -489,3 +493,29 @@ export const REVISIONS_DATA_QUERY =
                 }
             }
 }`
+export const CERTIFICATION_QUERY = `
+          query($id: ID!, $certifyId: ID!) {
+            offchainAssetReceiptVault(id: $id) 
+            {
+              certifications(where:{id:$certifyId}) 
+              {
+                id
+                information
+                timestamp
+              }
+            }
+          }   
+         `;
+export const CURRENT_CERTIFICATION_QUERY = `
+          query($id: ID!, $certifiedUntil: String!) {
+            offchainAssetReceiptVault(id: $id) 
+            {
+              certifications(orderBy: timestamp orderDirection: desc where:{certifiedUntil:$certifiedUntil}) 
+              {
+                id
+                information
+                timestamp
+              }
+            }
+          }   
+         `;

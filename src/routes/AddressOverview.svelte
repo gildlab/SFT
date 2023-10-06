@@ -127,7 +127,7 @@
 
 </script>
 
-<div class="{$sftInfo ? 'w-full' : 'left-margin'} address-overview">
+<div class="{$sftInfo ? 'w-full' : 'left-margin'} address-overview receipts">
   <div class="address-overview-container">
     <div class="card-header justify-between">
       <div class=""><b>Address</b> {address}</div>
@@ -178,12 +178,6 @@
 <style>
     .left-margin {
         margin-left: 223px;
-    }
-
-    .address-overview {
-        width: 100%;
-        margin-right: 20px;
-        margin-top: 102px;
     }
 
     .address-overview-container {

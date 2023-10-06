@@ -163,7 +163,7 @@
     .sft-info {
         width: 22rem;
         margin-left: 12.71rem;
-        margin-top: 3.5rem;
+        margin-top: -2.95rem;
         height: 100%;
         position: fixed;
         z-index: 3;

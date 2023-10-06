@@ -404,6 +404,7 @@ li {
 
 .dropdown .dropdown-menu {
     z-index: 1;
+    min-width: 100%;
     -webkit-box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
     -moz-box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
     box-shadow: 0 10px 5px -3px rgba(179, 179, 179, 1);
@@ -465,7 +466,8 @@ li {
 .dots {
     white-space: nowrap;
     overflow: hidden;
-    margin-left: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .dots::after {
@@ -490,7 +492,8 @@ li {
     justify-content: space-between;
     width: 630px;
     min-height: 300px;
-    padding: 24px 60px 60px 60px
+    padding: 24px 60px 60px 60px;
+    text-align: left;
 }
 
 .link-icon {
@@ -501,6 +504,11 @@ li {
 
 .link-icon:hover {
     cursor: pointer;
+}
+
+.receipts {
+    width: 100%;
+    margin-right: 20px;
 }
 
 .tooltip-text {

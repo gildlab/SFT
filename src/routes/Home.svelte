@@ -31,11 +31,11 @@
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
     import {onMount} from 'svelte';
+    import SearchBar from '../components/SearchBar.svelte';
 
     let username;
     let password;
     let view = "tile";
-    let searchText = "";
     let credentialLinks = {}
     let computedTokens = []
 
@@ -43,11 +43,6 @@
 
     function setComputedTokens() {
         computedTokens = $tokens
-    }
-
-    $: {
-        searchText;
-        searchToken()
     }
 
     async function deployImage(event) {
@@ -254,24 +249,19 @@
         }
     }
 
-    function searchToken() {
-        if (searchText) {
-            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                t.address.toLowerCase().includes(searchText.toLowerCase()))
+    function searchToken(e) {
+        if (e.detail) {
+            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(e.detail.toLowerCase()) ||
+                t.address.toLowerCase().includes(e.detail.toLowerCase()))
         } else {
             computedTokens = $tokens
         }
     }
+
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
   <div class="views flex justify-end pt-4 view-buttons ">
-    <div class="search-bar">
-      <div class="search-input-cont">
-        <input class="search-input" bind:value={searchText} placeholder="Search by Address/ Token name"/>
-        <img src={icons.search_icon} alt="search" class="search-icon">
-      </div>
-
-    </div>
+    <SearchBar on:search={searchToken}></SearchBar>
     <div class="view-changer-buttons">
       <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
         <img src={icons.tile_view} alt="tiles">
@@ -353,41 +343,6 @@
     .view-changer-buttons {
         display: flex;
         gap: 14px;
-    }
-
-    .search-bar {
-        width: 100%;
-        text-align: right;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .search-input-cont {
-        position: relative;
-        width: calc(50% - 10px);
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 6px;
-    }
-
-    .search-input {
-        border-radius: 10px;
-        border: none;
-        color: #000000;
-        width: 100%;
-        padding: 6px 46px;
-    }
-
-    .search-input, .search-input::placeholder {
-        font-family: 'Mukta', sans-serif;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
-        height: 35px;
     }
 
 </style>

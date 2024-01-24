@@ -4,11 +4,11 @@
     import {
         account,
         accountRoles,
-        activeNetwork, auditHistory, deposits,
+        activeNetwork, auditHistory,
         ethersData, roles, schemas,
         sftInfo,
         tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
-        vault
+        vault,computedTokens
     } from "../scripts/store.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
     import axios from 'axios';
@@ -30,19 +30,16 @@
     import {icons} from '../scripts/assets.js';
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
-    import {onMount} from 'svelte';
-    import SearchBar from '../components/SearchBar.svelte';
 
     let username;
     let password;
     let view = "tile";
     let credentialLinks = {}
-    let computedTokens = []
 
     $: $tokens.length && setComputedTokens()
 
     function setComputedTokens() {
-        computedTokens = $tokens
+        computedTokens.set($tokens)
     }
 
     async function deployImage(event) {
@@ -249,19 +246,9 @@
         }
     }
 
-    function searchToken(e) {
-        if (e.detail) {
-            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(e.detail.toLowerCase()) ||
-                t.address.toLowerCase().includes(e.detail.toLowerCase()))
-        } else {
-            computedTokens = $tokens
-        }
-    }
-
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
   <div class="views flex justify-end pt-4 view-buttons ">
-    <SearchBar on:search={searchToken}></SearchBar>
     <div class="view-changer-buttons">
       <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
         <img src={icons.tile_view} alt="tiles">
@@ -280,11 +267,11 @@
   {#if $tokens && $tokens.length}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
       {#if (view === "tile")}
-        <TileView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
+        <TileView tokens={$computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
       {/if}
       {#if (view === "list")}
-        <ListView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
+        <ListView tokens={$computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage}
                   on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}

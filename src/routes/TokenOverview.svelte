@@ -242,8 +242,8 @@
 
 </script>
 {#if !isEditorOpen}
-  <div class="{$sftInfo ? '' : 'left-margin'} w-full token-overview-container">
-    <div class="flex justify-between mb-2">
+  <div class="{$sftInfo ? '' : 'left-margin'} token-overview-container">
+    <div class="card-header justify-start pl-6">
       <div class="links">
         <SftCredentialLinks sft={token} on:editClick={handleEditClick}></SftCredentialLinks>
       </div>
@@ -301,7 +301,7 @@
   </div>
 {/if}
 {#if isEditorOpen}
-  <div class="editor mr-16 pt-4 left-margin w-full">
+  <div class="editor mr-16 pt-4 left-margin ">
     <div class="back flex ml-5 w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
       <img src={icons.back} alt="back" class="mr-6">
     </div>
@@ -320,27 +320,24 @@
     }
 
     .token-overview-container {
-        background: #FFFFFF;
-        border-radius: 10px 10px 0 0;
         margin-right: 102px;
-        color: #000000;
+        border-radius: 10px;
+        background: #ffffff;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-        padding: 14px 20px 20px 20px;
-        height: 100vh;
+        align-items: center;
+        min-width: 650px
     }
 
     .content {
-        border: 1px solid #C1C1C1;
-        border-radius: 10px;
-        padding: 20px;
+        padding: 20px 60px;
         height: 100%;
+        width: 100%;
     }
 
     .sft-image {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
     }
 
     #sft-logo-upload:hover .update{
@@ -349,8 +346,8 @@
 
     .sft-logo-container {
         background: #9D9D9D;
-        width: 303px;
-        height: 303px;
+        width: 210px;
+        height: 210px;
         display: flex;
         justify-content: center;
     }

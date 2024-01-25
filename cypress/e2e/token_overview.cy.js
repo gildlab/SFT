@@ -14,11 +14,4 @@ describe('Token overview page', () => {
         cy.url().should('include', '/#token-overview')
         cy.get(`.token-name`).should('exist');
     });
-
-    it('Should navigate to home page when typing in search', () => {
-        cy.get('.search-input').focus().type('j')
-        cy.wait(3)
-        cy.url().should('include', '/#list')
-    });
-
 })

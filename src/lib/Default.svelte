@@ -448,20 +448,20 @@
     <Route path="#auditors" component={Auditors}/>
   </div>
   <div class="{!$landing ? 'block' : 'hide'}">
-    <div class={$isMetamaskInstalled || $isCypress? "content" : "content-not-connected"}>
+    <div class={$isMetamaskInstalled || $isCypress? "content 45454" : "content-not-connected"}>
       <Header on:select={handleNetworkSelect} {location}></Header>
-      <div class="logo-container rounded-full border-white {$isMetamaskInstalled ? 'border-6' : ''}  ">
+      <div class="logo-container rounded-full border-white {$isMetamaskInstalled || $isCypress? 'border-6' : ''}  ">
         <a href="/#list">
           {#if !$activeToken.icon}
-            <img src={$isMetamaskInstalled? icons.logo: icons.sft_logo_white} alt=""
-                 class="{$isMetamaskInstalled ? 'account token-logo' : 'no-account'} rounded-full "/>
+            <img src={$isMetamaskInstalled || $isCypress? icons.logo: icons.sft_logo_white} alt=""
+                 class="{$isMetamaskInstalled || $isCypress? 'account token-logo' : 'no-account'} rounded-full "/>
           {:else}
             <img src={`${IPFS_GETWAY}${$activeToken.icon}`} alt="token logo"
                  class="rounded-full token-logo"/>
           {/if}
         </a>
       </div>
-      <div class="{ $isMetamaskInstalled ? 'block' : 'hide'}">
+      <div class="{ $isMetamaskInstalled || $isCypress ? 'block' : 'hide'}">
         <Navigation path={location} token={$data.offchainAssetReceiptVault}/>
         <div class={$sftInfo ? "sft-info-opened mt-61" : "mt-61" }>
           <div class="{$activeNetwork  ? 'block' : 'hide'}">
@@ -513,7 +513,7 @@
           </div>
         </div>
       </div>
-      {#if !$isMetamaskInstalled }
+      {#if !$isMetamaskInstalled && !$isCypress}
         <div>
           <div class="invalid-network f-weight-700">
             <label>To use the app:</label>

@@ -1,13 +1,27 @@
 <script>
-    import {account, activeNetwork, isMetamaskInstalled, pageTitle, titleIcon} from "../scripts/store.js";
+    import {
+        account,
+        activeNetwork,
+        isMetamaskInstalled,
+        pageTitle,
+        searchText,
+        titleIcon,
+        tokens, computedTokens, isCypress
+    } from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
     import {createEventDispatcher} from "svelte";
     import {formatAddress, connectAccount} from "../scripts/helpers.js";
     import HeaderDropdown from './HeaderDropdown.svelte';
     import BreadCrumbs from './BreadCrumbs.svelte';
+    import SearchBar from './SearchBar.svelte';
 
     export let location;
+
+    $: {
+        $searchText;
+        searchToken()
+    }
 
     let accountMenuOptions = [
         {
@@ -52,10 +66,20 @@
         account.set(acc);
     }
 
+    function searchToken() {
+        if ($searchText) {
+            computedTokens.set($tokens.filter(t => t.name.toLowerCase().includes($searchText.toLowerCase()) ||
+                t.address.toLowerCase().includes($searchText.toLowerCase())))
+        } else {
+            computedTokens.set($tokens)
+        }
+    }
+
+
 </script>
 
-<div class="{$isMetamaskInstalled ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
-  {#if $isMetamaskInstalled}
+<div class="{$isMetamaskInstalled || $isCypress? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
+  {#if $isMetamaskInstalled|| $isCypress}
     <div class="w-1/3"></div>
     <div class="page-title" id="{$pageTitle.replace(' ','-').toLowerCase()}">
       {#if $titleIcon}
@@ -79,6 +103,9 @@
     </div>
     {#if location && (location !== "/" && location !== "#list")}
       <BreadCrumbs/>
+    {/if}
+    {#if location && (location === "#list" || location.includes("#token-overview"))}
+      <SearchBar/>
     {/if}
   {/if}
 </div>

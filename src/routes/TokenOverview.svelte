@@ -241,74 +241,81 @@
     }
 
 </script>
-{#if !isEditorOpen}
-  <div class="{$sftInfo ? '' : 'left-margin'} w-full token-overview-container">
-    <div class="flex justify-between mb-2">
-      <div class="links">
-        <SftCredentialLinks sft={token} on:editClick={handleEditClick}></SftCredentialLinks>
-      </div>
-    </div>
-    <div class="content">
-      <div class="w-full flex justify-between">
-        <div class="w-1/2">
-          <TokenOverviewTable {token}/>
+<div class="{$sftInfo ? '' : 'left-margin'} wrapper">
+  {#if !isEditorOpen}
+    <div class="w-full token-overview-container">
+      <div class="card-header justify-start pl-6">
+        <div class="links">
+          <SftCredentialLinks sft={token} on:editClick={handleEditClick}></SftCredentialLinks>
         </div>
-        <div class="sft-image w-1/2">
-          <div class="sft-logo-container relative rounded-full"
-               class:hover={token?.deployer?.toLowerCase() === $account.toLowerCase()}>
-            <label for={`${token.address}-upload`} id="sft-logo-upload"
-                   class="flex items-center justify-center text-white flex-col {token?.deployer?.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
-              {#if token.icon}
-                <img src={`${IPFS_GETWAY}${token.icon}`} alt="token logo" class="logo" bind:this={logoPreview}/>
-                {#if token?.deployer?.toLowerCase() === $account.toLowerCase()}
-                  <div class="update">
-                    <div class="relative">
-                      <div class="update-container">
-                        <img src="{icons.camera}" alt="token logo"/>
-                        <span class="text">Update</span>
+      </div>
+      <div class="content">
+        <div class="w-full flex justify-between">
+          <div class="w-1/2">
+            <TokenOverviewTable {token}/>
+          </div>
+          <div class="sft-image w-1/2">
+            <div class="sft-logo-container relative rounded-full"
+                 class:hover={token?.deployer?.toLowerCase() === $account.toLowerCase()}>
+              <label for={`${token.address}-upload`} id="sft-logo-upload"
+                     class="flex items-center justify-center text-white flex-col {token?.deployer?.toLowerCase() === $account.toLowerCase() ? 'cursor-pointer' : '' }">
+                {#if token.icon}
+                  <img src={`${IPFS_GETWAY}${token.icon}`} alt="token logo" class="logo" bind:this={logoPreview}/>
+                  {#if token?.deployer?.toLowerCase() === $account.toLowerCase()}
+                    <div class="update">
+                      <div class="relative">
+                        <div class="update-container">
+                          <img src="{icons.camera}" alt="token logo"/>
+                          <span class="text">Update</span>
+                        </div>
+                        <svg width="303" height="303" viewBox="0 0 303 303" fill="none" class="w-[210px] h-[210px]"
+                             xmlns="http://www.w3.org/2000/svg">
+                          <mask id="mask0_3572_11735" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
+                                width="303" height="303">
+                            <circle cx="151.5" cy="151.5" r="151.5" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_3572_11735)">
+                            <rect x="-1.43555" y="178.914" width="303" height="142.843" fill="black" fill-opacity="0.6"/>
+                          </g>
+                        </svg>
                       </div>
-                      <svg width="303" height="303" viewBox="0 0 303 303" fill="none"
-                           xmlns="http://www.w3.org/2000/svg">
-                        <mask id="mask0_3572_11735" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
-                              width="303" height="303">
-                          <circle cx="151.5" cy="151.5" r="151.5" fill="#D9D9D9"/>
-                        </mask>
-                        <g mask="url(#mask0_3572_11735)">
-                          <rect x="-1.43555" y="178.914" width="303" height="142.843" fill="black" fill-opacity="0.6"/>
-                        </g>
-                      </svg>
                     </div>
-                  </div>
+                  {/if}
                 {/if}
-              {/if}
-              {#if !token.icon}
+                {#if !token.icon}
+                  {#if token?.deployer?.toLowerCase() === $account.toLowerCase()}
+                    <img src="{icons.camera}" alt="token logo"/>
+                    <span class="text">Update</span>
+                  {/if}
+                {/if}
                 {#if token?.deployer?.toLowerCase() === $account.toLowerCase()}
-                  <img src="{icons.camera}" alt="token logo"/>
-                  <span class="text">Update</span>
+                  <input type="file" id={`${token.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
+                         on:change={(e)=>onFileSelected(e)}
+                         bind:this={tokenLogo}/>
                 {/if}
-              {/if}
-              {#if token?.deployer?.toLowerCase() === $account.toLowerCase()}
-                <input type="file" id={`${token.address}-upload`} hidden accept=".jpg, .jpeg, .png, .svg"
-                       on:change={(e)=>onFileSelected(e)}
-                       bind:this={tokenLogo}/>
-              {/if}
-            </label>
+              </label>
 
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-{/if}
-{#if isEditorOpen}
-  <div class="editor mr-16 pt-4 left-margin w-full">
-    <div class="back flex ml-5 w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
-      <img src={icons.back} alt="back" class="mr-6">
+  {/if}
+  {#if isEditorOpen}
+    <div class="editor pt-4">
+      <div class="back flex ml-5 w-full cursor-pointer" on:click={()=>{isEditorOpen = false}}>
+        <img src={icons.back} alt="back" class="mr-6">
+      </div>
+      <CredentialLinksEditor on:okClick={handleOkButtonClick} sft={token}/>
     </div>
-    <CredentialLinksEditor on:okClick={handleOkButtonClick} sft={token}/>
-  </div>
-{/if}
+  {/if}
+</div>
+
 <style>
+    .wrapper{
+        position: relative;
+        margin-right: 96px;
+    }
     .editor {
         background: #FFFFFF;
         height: 100vh;
@@ -320,37 +327,33 @@
     }
 
     .token-overview-container {
-        background: #FFFFFF;
-        border-radius: 10px 10px 0 0;
-        margin-right: 102px;
-        color: #000000;
+        border-radius: 10px;
+        background: #ffffff;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
-        padding: 14px 20px 20px 20px;
-        height: 100vh;
+        align-items: center;
+        min-width: 650px
     }
 
     .content {
-        border: 1px solid #C1C1C1;
-        border-radius: 10px;
-        padding: 20px;
+        padding: 20px 60px;
         height: 100%;
+        width: 100%;
     }
 
     .sft-image {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
     }
 
-    #sft-logo-upload:hover .update{
-        display: flex ;
+    #sft-logo-upload:hover .update {
+        display: flex;
     }
 
     .sft-logo-container {
         background: #9D9D9D;
-        width: 303px;
-        height: 303px;
+        width: 210px;
+        height: 210px;
         display: flex;
         justify-content: center;
     }

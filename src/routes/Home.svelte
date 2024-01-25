@@ -4,11 +4,11 @@
     import {
         account,
         accountRoles,
-        activeNetwork, auditHistory, deposits,
+        activeNetwork, auditHistory,
         ethersData, roles, schemas,
         sftInfo,
         tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
-        vault
+        vault,computedTokens
     } from "../scripts/store.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
     import axios from 'axios';
@@ -30,24 +30,16 @@
     import {icons} from '../scripts/assets.js';
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
-    import {onMount} from 'svelte';
 
     let username;
     let password;
     let view = "tile";
-    let searchText = "";
     let credentialLinks = {}
-    let computedTokens = []
 
     $: $tokens.length && setComputedTokens()
 
     function setComputedTokens() {
-        computedTokens = $tokens
-    }
-
-    $: {
-        searchText;
-        searchToken()
+        computedTokens.set($tokens)
     }
 
     async function deployImage(event) {
@@ -254,24 +246,9 @@
         }
     }
 
-    function searchToken() {
-        if (searchText) {
-            computedTokens = $tokens.filter(t => t.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                t.address.toLowerCase().includes(searchText.toLowerCase()))
-        } else {
-            computedTokens = $tokens
-        }
-    }
 </script>
 <div class="flex flex-col w-full items-center home-container relative">
   <div class="views flex justify-end pt-4 view-buttons ">
-    <div class="search-bar">
-      <div class="search-input-cont">
-        <input class="search-input" bind:value={searchText} placeholder="Search by Address/ Token name"/>
-        <img src={icons.search_icon} alt="search" class="search-icon">
-      </div>
-
-    </div>
     <div class="view-changer-buttons">
       <div class="cursor-pointer tile-view-button" on:click={()=>{view = "tile"}}>
         <img src={icons.tile_view} alt="tiles">
@@ -290,11 +267,11 @@
   {#if $tokens && $tokens.length}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
       {#if (view === "tile")}
-        <TileView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
+        <TileView tokens={$computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage} on:okClick={handleOkButtonClick}/>
       {/if}
       {#if (view === "list")}
-        <ListView tokens={computedTokens} on:tokenSelect={handleTokenSelect}
+        <ListView tokens={$computedTokens} on:tokenSelect={handleTokenSelect}
                   on:fileDrop={deployImage}
                   on:listEditClick={()=>{isListEditorOpen=true}} on:listEditClosed={()=>{isListEditorOpen=false}}/>
       {/if}
@@ -353,41 +330,6 @@
     .view-changer-buttons {
         display: flex;
         gap: 14px;
-    }
-
-    .search-bar {
-        width: 100%;
-        text-align: right;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .search-input-cont {
-        position: relative;
-        width: calc(50% - 10px);
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 6px;
-    }
-
-    .search-input {
-        border-radius: 10px;
-        border: none;
-        color: #000000;
-        width: 100%;
-        padding: 6px 46px;
-    }
-
-    .search-input, .search-input::placeholder {
-        font-family: 'Mukta', sans-serif;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
-        height: 35px;
     }
 
 </style>

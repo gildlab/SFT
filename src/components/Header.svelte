@@ -6,7 +6,7 @@
         pageTitle,
         searchText,
         titleIcon,
-        tokens, computedTokens
+        tokens, computedTokens, isCypress
     } from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
@@ -78,8 +78,8 @@
 
 </script>
 
-<div class="{$isMetamaskInstalled ? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
-  {#if $isMetamaskInstalled}
+<div class="{$isMetamaskInstalled || $isCypress? 'header' : ''} flex w-full h-14 justify-between pr-12 items-center font-bold">
+  {#if $isMetamaskInstalled|| $isCypress}
     <div class="w-1/3"></div>
     <div class="page-title" id="{$pageTitle.replace(' ','-').toLowerCase()}">
       {#if $titleIcon}

@@ -350,7 +350,7 @@
   </div>
 
 
-  {#if !loggedIn || !$account}
+  {#if (!loggedIn || !$account) && !$isCypress}
     <div class="flex flex-col gap-5 w-full">
 
       <span class="font-bold w-full text-left ml-6"> {$tokenName}</span>

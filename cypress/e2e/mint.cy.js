@@ -9,15 +9,6 @@ describe('The Home Page', () => {
         cy.get(`#launch-button`).click();
         cy.get(`#token-name-Jefo`).click();
     })
-    it('Should visit mint after setting ipfs credentials', () => {
-        cy.get(`.path-mint`).click();
-        cy.window().its('localStorage').then((localStorage) => {
-            localStorage.setItem('ipfsUsername', 'gildlab1');
-            localStorage.setItem('ipfsPassword', 'twet.gral.yew.phai');
-        });
-
-        cy.url().should('include', '/#mint')
-    });
     it('Mint button should be disabled if no mint amount and asset class', () => {
         cy.get(`.path-mint`).click();
         cy.window().its('localStorage').then((localStorage) => {

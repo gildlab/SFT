@@ -17,6 +17,7 @@ describe('Token overview page', () => {
 
     it('Should navigate to home page when typing in search', () => {
         cy.get('.search-input').focus().type('j')
+        cy.wait(3)
         cy.url().should('include', '/#list')
     });
 

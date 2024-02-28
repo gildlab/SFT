@@ -26,7 +26,7 @@
         isCypress,
         schemas,
         titleIcon,
-        landing, isMetamaskInstalled
+        landing, isMetamaskInstalled, tokensLoading
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -321,6 +321,7 @@
     }
 
     async function getTokens() {
+        tokensLoading.set(true)
         if ($isCypress) {
             tokens.set(mock.testTokens);
             return
@@ -340,7 +341,7 @@
         } catch (e) {
             console.log(e)
         }
-
+        tokensLoading.set(false)
     }
 
     async function getRoles(vaultAddress) {

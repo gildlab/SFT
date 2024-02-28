@@ -7,7 +7,7 @@
         activeNetwork, auditHistory, deposits,
         ethersData, roles, schemas,
         sftInfo,
-        tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
+        tokens, tokensLoading, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
         vault
     } from "../scripts/store.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
@@ -38,6 +38,7 @@
     let searchText = "";
     let credentialLinks = {}
     let computedTokens = []
+    let loading = false
 
     $: $tokens.length && setComputedTokens()
 
@@ -173,6 +174,7 @@
                 tokens.set([])
             }
         });
+
     }
 
     async function handleTokenSelect(event) {
@@ -282,12 +284,12 @@
     </div>
 
   </div>
-  {#if !$tokens?.length}
+  {#if $tokensLoading}
     <div class="loader">
       <SftLoader></SftLoader>
     </div>
   {/if}
-  {#if $tokens && $tokens.length}
+  {#if $tokens && $tokens.length && !$tokensLoading}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
       {#if (view === "tile")}
         <TileView tokens={computedTokens} on:tokenSelect={handleTokenSelect}

@@ -50,7 +50,8 @@ const networks = [
         icon: 'polygon',
         factory_address: '0x94927792b88D518f9a429572dD3D40400b8BE906',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
-    },    {
+    },
+    {
         id: 42161,
         chainId: 42161,
         name: 'atbitrum',
@@ -62,6 +63,19 @@ const networks = [
         icon: 'arbitrum',
         factory_address: '0xdf3f47707a27Ec838d7691dfB7a02a795eE554D5',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-arbitrum"
+    },
+    {
+        id: 421614,
+        chainId: 421614,
+        name: 'sepolia',
+        displayName: "Arbitrum sepolia",
+        currencySymbol: "ETH",
+        blockExplorer: "https://sepolia.arbiscan.io/",
+        blockExplorerIcon: "arbitrum",
+        rpcUrl: "https://sepolia-rollup.arbitrum.io/rpc",
+        icon: 'arbitrum',
+        factory_address: '0xf1A14e96977E8dE295Ba9612691D127B157d1371',
+        subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-sepolia"
     },
     // {
     //     id: 80001,

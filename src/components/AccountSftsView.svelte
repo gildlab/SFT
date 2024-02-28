@@ -38,7 +38,7 @@
       <tr>
         <td class="w-1/12">
           <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
-            <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
+            <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon} width="24" height="24">
           </a>
         </td>
         <td><span on:click={()=>{navigate(`#token-overview/${sft.address}`)}}

@@ -51,7 +51,7 @@
           class="focus:outline-none items-center text-white display-flex mr-10 relative" type="button">
     {#if triggerIcon}
       <img src={triggerIcon}
-           alt={triggerLabel}/>
+           alt={triggerLabel} width="28" height="28"/>
     {/if}
     <span class="network-name">{triggerLabel}</span>
     <img src={ icons.expand} alt="expand"/>
@@ -62,7 +62,7 @@
       {#each items as item}
         <li on:click={()=>handleNavItemClick(item)} class="list-item cursor-pointer display-flex">
           {#if item.icon}
-            <img src={icons[item.icon]} alt={item?.displayName}/>
+            <img src={icons[item.icon]} alt={item?.displayName} width="28" height="28"/>
           {/if}
           <span class={`${item.class} network-name`}>{item?.displayName} </span>
           {#if item.rightIcon}

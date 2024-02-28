@@ -49,6 +49,7 @@ import issuers_icon from '../assets/icons/issuers_icon.svg';
 import auditors_hero from '../assets/icons/auditors_hero.webp';
 import wave_resp from '../assets/icons/wave_resp.svg';
 import investor_hero_tile from '../assets/icons/investor_hero_tile.webp';
+import arbitrum from '../assets/icons/arbitrum.svg';
 
 export const icons = {
     ethereum,
@@ -101,5 +102,6 @@ export const icons = {
     issuers_icon,
     auditors_hero,
     wave_resp,
-    investor_hero_tile
+    investor_hero_tile,
+    arbitrum
 }

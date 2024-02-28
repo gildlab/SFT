@@ -50,6 +50,18 @@ const networks = [
         icon: 'polygon',
         factory_address: '0x94927792b88D518f9a429572dD3D40400b8BE906',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
+    },    {
+        id: 42161,
+        chainId: 42161,
+        name: 'atbitrum',
+        displayName: "Arbitrum one",
+        currencySymbol: "ETH",
+        blockExplorer: "https://arbiscan.io/",
+        blockExplorerIcon: "arbitrum",
+        rpcUrl: "https://arbitrum.llamarpc.com",
+        icon: 'arbitrum',
+        factory_address: '0xdf3f47707a27Ec838d7691dfB7a02a795eE554D5',
+        subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-arbitrum"
     },
     // {
     //     id: 80001,

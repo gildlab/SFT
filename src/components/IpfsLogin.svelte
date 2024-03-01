@@ -42,7 +42,6 @@
         let formData = new FormData();
         formData.append('file', 'credentials')
 
-
         const requestArr = IPFS_APIS.map((url) => {
             return axios.request({
                 url,

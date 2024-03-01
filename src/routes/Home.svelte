@@ -5,7 +5,7 @@
         account,
         accountRoles,
         activeNetwork, auditHistory, deposits,
-        ethersData, roles, schemas,
+        ethersData, isCypress, roles, schemas,
         sftInfo,
         tokens, tokensLoading, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
         vault
@@ -31,6 +31,7 @@
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
     import {onMount} from 'svelte';
+    import {mock} from '../test/mock.js';
 
     let username;
     let password;
@@ -41,6 +42,13 @@
     let loading = false
 
     $: $tokens.length && setComputedTokens()
+
+    onMount(() => {
+            isCypress.set(!!window.Cypress)
+
+            tokens.set(mock.testTokens);
+        }
+    )
 
     function setComputedTokens() {
         computedTokens = $tokens

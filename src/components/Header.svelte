@@ -63,11 +63,11 @@
       {/if}
       {$pageTitle}</div>
     <div class="flex justify-end w-1/3 whitespace-nowrap items-center">
-      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]}
+      <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} id="networks-dropdown"
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
                       items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
       {#if $account}
-        <HeaderDropdown triggerLabel={formatAddress($account)}
+        <HeaderDropdown triggerLabel={formatAddress($account)} id="account-dropdown"
                         items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">
         </HeaderDropdown>
       {:else }

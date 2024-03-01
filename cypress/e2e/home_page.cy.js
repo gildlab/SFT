@@ -126,4 +126,12 @@ describe('The Home Page', () => {
         cy.get('#token-overview').should('exist');
         cy.get('.navigation-token-icon').should('exist');
     });
+    it('Should check arbitrum is in the menu', () => {
+        cy.get(`#networks-dropdown`).click();
+        cy.get('#atbitrum').should('exist')
+    });
+    it('Should check arbitrum sepolia is in the menu', () => {
+        cy.get(`#networks-dropdown`).click();
+        cy.get('#sepolia').should('exist')
+    });
 })

@@ -5,6 +5,7 @@
     export let triggerIcon;
     export let triggerLabel;
     export let items;
+    export let id;
 
     let dropdown;
     let dropdownHidden = true;
@@ -47,7 +48,7 @@
 
 </script>
 <div class="dropdown-container" on:click_outside={handleClickOutside} use:clickOutside>
-  <button id="networks-dropdown" data-dropdown-toggle="networks" on:click={()=>toggleDropdown()}
+  <button id="{id}" data-dropdown-toggle="networks" on:click={()=>toggleDropdown()}
           class="focus:outline-none items-center text-white display-flex mr-10 relative" type="button">
     {#if triggerIcon}
       <img src={triggerIcon}
@@ -60,7 +61,7 @@
   <div id="networks" class="absolute top-10 drop-menu" class:hidden={dropdownHidden} bind:this={dropdown}>
     <ul class="dropdown-items" aria-labelledby="dropdownDefaultButton">
       {#each items as item}
-        <li on:click={()=>handleNavItemClick(item)} class="list-item cursor-pointer display-flex">
+        <li on:click={()=>handleNavItemClick(item)} class="list-item cursor-pointer display-flex" id="{item.name}">
           {#if item.icon}
             <img src={icons[item.icon]} alt={item?.displayName} width="28" height="28"/>
           {/if}

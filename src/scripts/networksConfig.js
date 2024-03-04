@@ -59,7 +59,7 @@ const networks = [
         currencySymbol: "ETH",
         blockExplorer: "https://arbiscan.io/",
         blockExplorerIcon: "arbitrum",
-        rpcUrl: "https://arbitrum.llamarpc.com",
+        rpcUrl: "https://arb1.arbitrum.io/rpc",
         icon: 'arbitrum',
         factory_address: '0xdf3f47707a27Ec838d7691dfB7a02a795eE554D5',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-arbitrum"

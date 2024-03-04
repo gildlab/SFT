@@ -1,5 +1,5 @@
 <script>
-    import {account, accountRoles, sftInfo, tokenName, vault, isCypress} from "../scripts/store.js";
+    import {sftInfo, tokenName, vault} from "../scripts/store.js";
     import NavigationButton from './NavigationButton.svelte';
     import TokenOverviewTable from './TokenOverviewTable.svelte';
     import {navigate} from '../scripts/helpers.js';

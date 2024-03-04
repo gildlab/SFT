@@ -52,7 +52,11 @@ export const MAGIC_NUMBERS = {
     /**
      * OA Token credential links
      */
-    OA_TOKEN_CREDENTIAL_LINKS: BigInt(0xffbc38eb14ad2209n)
+    OA_TOKEN_CREDENTIAL_LINKS: BigInt(0xffbc38eb14ad2209n),
+    /**
+     * OA Token authors
+     */
+    AUTHORS_LIST: BigInt(0xffb2637608c09e38)
 };
 
 export const TRANSACTION_IN_PROGRESS_TEXT = "Transaction taking place, please wait."

@@ -2,7 +2,7 @@ export let mock = {
     account:'0xc0d477556c25c9d67e1f57245c7453da776b51cf',
     testTokens: [{
         "deployer": "0xc0d477556c25c9d67e1f57245c7453da776b51cf",
-        "name": "Jefo",
+        "name": "Jefo-test",
         "address": "0xdbcf2d8b73d06e6fa593b98857097257ebef1951",
         "symbol": "jff",
         "deployBlock": "37038452",

@@ -132,7 +132,7 @@
     <div class="card-header justify-between">
       <div class=""><b>Address</b> {address}</div>
       <a href={`${$activeNetwork?.blockExplorer}/address/${address}`} target="_blank">
-        <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon}>
+        <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon} width="24" height="24">
       </a>
     </div>
 

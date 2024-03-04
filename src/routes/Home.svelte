@@ -5,9 +5,9 @@
         account,
         accountRoles,
         activeNetwork, auditHistory, deposits,
-        ethersData, roles, schemas,
+        ethersData, isCypress, roles, schemas,
         sftInfo,
-        tokens, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
+        tokens, tokensLoading, transactionError, transactionInProgress, transactionInProgressShow, transactionSuccess,
         vault
     } from "../scripts/store.js";
     import {IPFS_APIS, MAGIC_NUMBERS} from '../scripts/consts.js';
@@ -31,6 +31,7 @@
     import TileView from '../components/TileView.svelte';
     import ListView from '../components/ListView.svelte';
     import {onMount} from 'svelte';
+    import {mock} from '../test/mock.js';
 
     let username;
     let password;
@@ -38,8 +39,16 @@
     let searchText = "";
     let credentialLinks = {}
     let computedTokens = []
+    let loading = false
 
     $: $tokens.length && setComputedTokens()
+
+    onMount(() => {
+            if (!!window.Cypress) {
+                tokens.set(mock.testTokens);
+            }
+        }
+    )
 
     function setComputedTokens() {
         computedTokens = $tokens
@@ -173,6 +182,7 @@
                 tokens.set([])
             }
         });
+
     }
 
     async function handleTokenSelect(event) {
@@ -282,12 +292,12 @@
     </div>
 
   </div>
-  {#if !$tokens?.length}
+  {#if $tokensLoading}
     <div class="loader">
       <SftLoader></SftLoader>
     </div>
   {/if}
-  {#if $tokens && $tokens.length}
+  {#if $tokens && $tokens.length && !$tokensLoading}
     <div class="{$sftInfo ? 'w-full' : view === 'list' ? 'list-view': 'tile-view'} tokens mr-5">
       {#if (view === "tile")}
         <TileView tokens={computedTokens} on:tokenSelect={handleTokenSelect}

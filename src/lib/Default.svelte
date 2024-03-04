@@ -26,7 +26,7 @@
         isCypress,
         schemas,
         titleIcon,
-        landing, isMetamaskInstalled
+        landing, isMetamaskInstalled, tokensLoading
     } from "../scripts/store.js";
     import networks from "../scripts/networksConfig.js";
     import SftSetup from "../routes/SftSetup.svelte";
@@ -82,7 +82,7 @@
     let connectedAccount;
     export let url = "";
 
-    isMetamaskInstalled.set(typeof window.ethereum !== "undefined");
+    isMetamaskInstalled.set(typeof window.ethereum !== "undefined" || !!window.Cypress);
 
     let location = window.location.hash;
     let selectedTab = "#mint";
@@ -321,6 +321,7 @@
     }
 
     async function getTokens() {
+        tokensLoading.set(true)
         if ($isCypress) {
             tokens.set(mock.testTokens);
             return
@@ -340,7 +341,7 @@
         } catch (e) {
             console.log(e)
         }
-
+        tokensLoading.set(false)
     }
 
     async function getRoles(vaultAddress) {
@@ -448,7 +449,7 @@
     <Route path="#auditors" component={Auditors}/>
   </div>
   <div class="{!$landing ? 'block' : 'hide'}">
-    <div class={$isMetamaskInstalled || $isCypress? "content" : "content-not-connected"}>
+    <div class={$isMetamaskInstalled ? "content" : "content-not-connected"}>
       <Header on:select={handleNetworkSelect} {location}></Header>
       <div class="logo-container rounded-full border-white {$isMetamaskInstalled ? 'border-6' : ''}  ">
         <a href="/#list">
@@ -513,7 +514,7 @@
           </div>
         </div>
       </div>
-      {#if !$isMetamaskInstalled }
+      {#if !$isMetamaskInstalled}
         <div>
           <div class="invalid-network f-weight-700">
             <label>To use the app:</label>

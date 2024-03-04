@@ -44,9 +44,9 @@
     $: $tokens.length && setComputedTokens()
 
     onMount(() => {
-            isCypress.set(!!window.Cypress)
-
-            tokens.set(mock.testTokens);
+            if (!!window.Cypress) {
+                tokens.set(mock.testTokens);
+            }
         }
     )
 

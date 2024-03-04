@@ -7,7 +7,7 @@ describe('The Home Page', () => {
     beforeEach(() => {
         cy.visit('/#')
         cy.get(`#launch-button`).click();
-        cy.get(`#token-name-Jefo`).click();
+        cy.get(`#token-name-Jefo-test`).click();
     })
     it('IPFS sign in should be visible if not logged in or navigate to mint', () => {
         cy.get(`.path-mint`).click();

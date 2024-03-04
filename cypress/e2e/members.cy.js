@@ -8,7 +8,7 @@ describe('Members page', () => {
         cy.visit('/#')
         cy.get(`#launch-button`).click();
 
-        cy.get(`#token-name-Jefo`).click();
+        cy.get(`#token-name-Jefo-test`).click();
         cy.url().should('include', '/#token-overview')
     })
     it('should be navigated to members', () => {

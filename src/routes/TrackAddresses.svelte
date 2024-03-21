@@ -28,6 +28,10 @@
         }
         return Promise.reject("The Clipboard API is not available.");
     }
+
+    function removeAddress(address) {
+        console.log(address)
+    }
 </script>
 
 <div class="{$sftInfo ? 'w-full' : 'left-margin'} mr-5">
@@ -44,12 +48,13 @@
         </div>
       </div>
       <span class="self-start">Current Addresses to track IPFS pins from</span>
-      <table class="sft-table">
+      <table class="sft-table shadow-none">
         <thead>
         <tr>
           <th></th>
           <th>Current addresses</th>
-          <th>Date added</th>
+          <th class="rounded-tr-[10px]">Date added</th>
+          <th class="!bg-white"></th>
         </tr>
         </thead>
         <tbody>
@@ -57,11 +62,14 @@
 
           {#each addresses as ad}
             <tr class="tb-row">
-              <td class="cursor-pointer hover:opacity-50" on:click={()=>{copyAddress(ad.address)}}><img class="ml-5"
-                                                                                                        src="{icons.copy_brown}"
-                                                                                                        alt="copy"></td>
+              <td class="cursor-pointer hover:opacity-50" on:click={()=>{copyAddress(ad.address)}}>
+                <img class="ml-5" src="{icons.copy_brown}" alt="copy">
+              </td>
               <td class="address flex">{ad.address.toLowerCase()}</td>
               <td>{timeStampToDate(ad?.timestamp, "yy-mm-dd/tt:tt")}</td>
+              <td class="bg-white border-0" on:click={()=>{removeAddress(ad.address)}}>
+                <img class="ml-2 cursor-pointer hover:opacity-50" src="{icons.bin}" alt="copy">
+              </td>
 
             </tr>
           {/each}

@@ -16,15 +16,34 @@
         {address: "0xbaa3e3dd6eeebf87af39fc35eeccdf12537db515", timestamp: "1710922144"},
     ]
     let loading = false;
+    let address = '';
 
+    function addAddress() {
+        console.log(address)
+    }
+
+    function copyAddress(address) {
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(address.toLowerCase());
+        }
+        return Promise.reject("The Clipboard API is not available.");
+    }
 </script>
 
-<div class="{$sftInfo ? 'w-full' : 'left-margin'} receipts">
+<div class="{$sftInfo ? 'w-full' : 'left-margin'} mr-5">
   {#if loading}
     <SftLoader/>
   {/if}
   {#if !loading }
-    <div class="sft-table-container p-8">
+    <div class="bg-white rounded-xl gap-4 flex flex-col p-8">
+      <div class="flex flex-col items-start gap-2 w-full font-normal">
+        <span>Add an address to track IPFS pins from</span>
+        <div class="flex gap-5 w-full">
+          <input class="default-input w-1/2" bind:value={address}/>
+          <button class="default-btn" on:click={()=>{addAddress()}}> Add address</button>
+        </div>
+      </div>
+      <span class="self-start">Current Addresses to track IPFS pins from</span>
       <table class="sft-table">
         <thead>
         <tr>
@@ -38,7 +57,9 @@
 
           {#each addresses as ad}
             <tr class="tb-row">
-              <td><img class="ml-5" src="{icons.copy_brown}" alt="copy"></td>
+              <td class="cursor-pointer hover:opacity-50" on:click={()=>{copyAddress(ad.address)}}><img class="ml-5"
+                                                                                                        src="{icons.copy_brown}"
+                                                                                                        alt="copy"></td>
               <td class="address flex">{ad.address.toLowerCase()}</td>
               <td>{timeStampToDate(ad?.timestamp, "yy-mm-dd/tt:tt")}</td>
 
@@ -57,12 +78,6 @@
 <style>
     .left-margin {
         margin-left: 223px;
-    }
-
-    .receipts {
-        /*width: 100%;*/
-        margin-right: 20px;
-        /*margin-top: 117px;*/
     }
 
     .address {

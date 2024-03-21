@@ -15,6 +15,7 @@ import gild_lab from '../assets/icons/gild_lab.svg'
 import rain from '../assets/icons/rain.svg'
 import camera from '../assets/icons/camera.svg'
 import copy from '../assets/icons/copy.svg'
+import copy_brown from '../assets/icons/copy_brown.svg'
 import discord from '../assets/icons/discord.svg'
 import etherscan from '../assets/icons/etherscan.svg'
 import polygonscan from '../assets/icons/polygonscan.svg'
@@ -103,5 +104,6 @@ export const icons = {
     auditors_hero,
     wave_resp,
     investor_hero_tile,
-    arbitrum
+    arbitrum,
+    copy_brown
 }

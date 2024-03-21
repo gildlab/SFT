@@ -78,6 +78,7 @@
     import Issuers from '../routes/Issuers.svelte';
     import Curators from '../routes/Curators.svelte';
     import Auditors from '../routes/Auditors.svelte';
+    import TrackAddresses from '../routes/TrackAddresses.svelte';
 
     let connectedAccount;
     export let url = "";
@@ -487,7 +488,8 @@
             <Route path="#new-asset-class" component={NewSchema}/>
             <Route path="#asset-information/:id/:id" component={AssetInformation}/>
             <Route path="#sft-create-success" component={SftCreateSuccess}/>
-            <Route path="#ipfs" component={Ipfs}/>
+            <Route path="#ipfs-login" component={Ipfs}/>
+            <Route path="#track-addresses" component={TrackAddresses}/>
             <Route path="#manual" component={Manual}/>
             <Route path="#new-revision/:id" component={NewRevision}/>
             <div class={location === '#mint' || location === "#redeem" ? 'tabs show' : 'tabs hide'}>

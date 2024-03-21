@@ -82,7 +82,9 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#asset-history", "Asset history"],
     ["#change-comparison", "Change comparison"],
     ["#address-overview", "Address overview"],
-    ["#knowledgebase", "Knowledgebase"]
+    ["#knowledgebase", "Knowledgebase"],
+    ["#ipfs-login","IPFS login"],
+    ["#track-addresses","Track addresses"]
 ]);
 
 export const landingPages = ['', '/', '#', '#transparency', '#investors', '#issuers', '#curators','#auditors']

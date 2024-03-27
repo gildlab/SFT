@@ -3,6 +3,14 @@
     import {timeStampToDate} from "../scripts/helpers.js";
     import SftLoader from '../components/SftLoader.svelte';
     import {icons} from '../scripts/assets.js';
+    import { convertAddress, initWasm } from "../wasm_utils.js";
+
+    let convertedAddress = "";
+
+    async function convert(addresses) {
+        await initWasm();
+        convertedAddress = await convertAddress(addresses);
+    }
 
     let error = ''
     let addresses = [
@@ -18,8 +26,10 @@
     let loading = false;
     let address = '';
 
-    function addAddress() {
+    async function addAddress() {
         console.log(address)
+        await convert(addresses.map(a=>a.address))
+        console.log(convertedAddress)
     }
 
     function copyAddress(address) {

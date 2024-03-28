@@ -1,6 +1,6 @@
 // src/wasmModule.js
 
-import init, { concat_hex_addresses } from "../public/pkg/wasm_utils.js";
+import init, { concat_hex_addresses, cbor_encode_addresses} from "../public/pkg/encoding_addresses.js";
 
 let wasm;
 
@@ -11,6 +11,10 @@ async function initWasm() {
 export async function convertAddress(hexAddress) {
     if (!wasm) await initWasm();
     return concat_hex_addresses(hexAddress);
+}
+export async function encodeAddresses(hexAddress) {
+    if (!wasm) await initWasm();
+    return cbor_encode_addresses(hexAddress);
 }
 
 export { initWasm };

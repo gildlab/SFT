@@ -3,15 +3,13 @@
     import {timeStampToDate} from "../scripts/helpers.js";
     import SftLoader from '../components/SftLoader.svelte';
     import {icons} from '../scripts/assets.js';
-    import { encodeAddresses, initWasm } from "../wasm_utils.js";
-    import {arrayify} from 'ethers/lib/utils.js';
+    import {encodeAddresses, initWasm} from "../wasm_utils.js";
 
     let convertedAddress = "";
 
     async function convert(addresses) {
         await initWasm();
-        convertedAddress = await encodeAddresses(addresses);
-        console.log(convertedAddress)
+        return await encodeAddresses(addresses);
     }
 
     let error = ''
@@ -29,10 +27,8 @@
     let address = '';
 
     async function addAddress() {
-        console.log(111, arrayify("0xff0a89c674ee7874"))
-        await convert(["0xff0a89c674ee7874",...addresses.map(a=>a.address)])
-        console.log(222, convertedAddress)
-        console.log([...arrayify("0xff0a89c674ee7874"),...convertedAddress])
+        convertedAddress = await convert(addresses.map(a=>a.address))
+        console.log(convertedAddress)
 
     }
 

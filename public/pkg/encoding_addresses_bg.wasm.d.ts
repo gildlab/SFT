@@ -2,7 +2,8 @@
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
 export function concat_hex_addresses(a: number, b: number): void;
-export function cbor_encode_addresses(a: number): number;
+export function hex_to_bytes(a: number, b: number, c: number): void;
+export function cbor_encode_addresses(a: number, b: number): number;
 export function __wbindgen_malloc(a: number, b: number): number;
 export function __wbindgen_realloc(a: number, b: number, c: number, d: number): number;
 export const __wbindgen_export_2: WebAssembly.Table;

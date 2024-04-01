@@ -33,6 +33,8 @@ export const MAGIC_NUMBERS = {
      * Prefixes every rain meta document
      */
     RAIN_META_DOCUMENT: BigInt(0xff0a89c674ee7874n),
+
+    RAIN_META_DOCUMENT_HEX_STRING: "0xff0a89c674ee7874",
     /**S
      * OA Schema
      */
@@ -56,7 +58,7 @@ export const MAGIC_NUMBERS = {
     /**
      * OA Token authors
      */
-    AUTHORS_LIST: BigInt(0xffb2637608c09e38)
+    AUTHORS_LIST: BigInt(0xffb2637608c09e38n)
 };
 
 export const TRANSACTION_IN_PROGRESS_TEXT = "Transaction taking place, please wait."
@@ -83,8 +85,8 @@ export const ROUTE_LABEL_MAP = new Map([
     ["#change-comparison", "Change comparison"],
     ["#address-overview", "Address overview"],
     ["#knowledgebase", "Knowledgebase"],
-    ["#ipfs-login","IPFS login"],
-    ["#track-addresses","Track addresses"]
+    ["#ipfs-login", "IPFS login"],
+    ["#track-addresses", "Track addresses"]
 ]);
 
-export const landingPages = ['', '/', '#', '#transparency', '#investors', '#issuers', '#curators','#auditors']
+export const landingPages = ['', '/', '#', '#transparency', '#investors', '#issuers', '#curators', '#auditors']

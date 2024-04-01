@@ -3,11 +3,12 @@
     import {timeStampToDate} from "../scripts/helpers.js";
     import SftLoader from '../components/SftLoader.svelte';
     import {icons} from '../scripts/assets.js';
-    import {encodeAddresses, initWasm} from "../wasm_utils.js";
+    import {encodeAddresses, hexToBytes, initWasm} from "../wasm_utils.js";
+    import {MAGIC_NUMBERS} from '../scripts/consts.js';
+    import {arrayify} from 'ethers/lib/utils.js';
 
-    let convertedAddress = "";
 
-    async function convert(addresses) {
+    async function cborEncodeAddress(addresses) {
         await initWasm();
         return await encodeAddresses(addresses);
     }
@@ -27,9 +28,28 @@
     let address = '';
 
     async function addAddress() {
-        convertedAddress = await convert(addresses.map(a=>a.address))
-        console.log(convertedAddress)
+        let byteAddress = await hexToBytes(address)
 
+        // Create a new Uint8Array with a length of 21 bytes
+        let newArray = new Uint8Array(21);
+
+        // Set the first byte of the new array to 1
+        newArray[0] = 1;
+
+        // Copy the contents of the original array to the new array starting from index 1
+        newArray.set(byteAddress, 1);
+
+        //Cbor Encode the address
+        let cborEncoded = await cborEncodeAddress(newArray)
+
+        let rainMagic = arrayify(MAGIC_NUMBERS.RAIN_META_DOCUMENT_HEX_STRING)
+
+        let constructedMeta = new Uint8Array(rainMagic.length + cborEncoded.length);
+
+        constructedMeta.set(rainMagic, 0);
+        constructedMeta.set(cborEncoded, rainMagic.length);
+
+        console.log("concatenatedBytes", constructedMeta)
     }
 
     function copyAddress(address) {
@@ -41,6 +61,32 @@
 
     function removeAddress(address) {
         console.log(address)
+    }
+
+    async function remove(address) {
+
+        let byteAddress = await hexToBytes(address)
+        // Create a new Uint8Array with a length of 21 bytes
+        let newArray = new Uint8Array(21);
+
+        // Set the first byte of the new array to 0
+        newArray[0] = 0;
+
+        // Copy the contents of the original array to the new array starting from index 1
+        newArray.set(byteAddress, 1);
+
+        //Cbor Encode the address
+        let cborEncoded = await cborEncodeAddress(newArray)
+
+        let rainMagic = arrayify(MAGIC_NUMBERS.RAIN_META_DOCUMENT_HEX_STRING)
+
+        let constructedMeta = new Uint8Array(rainMagic.length + cborEncoded.length);
+
+        constructedMeta.set(rainMagic, 0);
+        constructedMeta.set(cborEncoded, rainMagic.length);
+
+        console.log("concatenatedBytes", constructedMeta)
+
     }
 </script>
 

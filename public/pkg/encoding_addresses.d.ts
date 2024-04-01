@@ -6,17 +6,23 @@
 */
 export function concat_hex_addresses(addresses: Array<any>): Uint8Array;
 /**
-* @param {Array<any>} addresses
+* @param {string} hex_val
+* @returns {Uint8Array | undefined}
+*/
+export function hex_to_bytes(hex_val: string): Uint8Array | undefined;
+/**
+* @param {Uint8Array} address
 * @returns {Promise<any>}
 */
-export function cbor_encode_addresses(addresses: Array<any>): Promise<any>;
+export function cbor_encode_addresses(address: Uint8Array): Promise<any>;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly concat_hex_addresses: (a: number, b: number) => void;
-  readonly cbor_encode_addresses: (a: number) => number;
+  readonly hex_to_bytes: (a: number, b: number, c: number) => void;
+  readonly cbor_encode_addresses: (a: number, b: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;

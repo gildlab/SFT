@@ -90,3 +90,5 @@ export const ROUTE_LABEL_MAP = new Map([
 ]);
 
 export const landingPages = ['', '/', '#', '#transparency', '#investors', '#issuers', '#curators', '#auditors']
+
+export const RAIN_METADATA_CONTRACT_ADDRESS = "0x441f7AF49387295638Eec40577dB67dc5776c683"

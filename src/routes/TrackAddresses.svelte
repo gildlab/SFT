@@ -1,19 +1,24 @@
 <script>
-    import {activeNetwork, ethersData, sftInfo} from "../scripts/store";
+    import {account, activeNetwork, ethersData, sftInfo} from "../scripts/store";
     import {getContract, timeStampToDate} from "../scripts/helpers.js";
     import SftLoader from '../components/SftLoader.svelte';
     import {icons} from '../scripts/assets.js';
     import {encodeAddresses, hexToBytes, initWasm} from "../wasm_utils.js";
-    import {MAGIC_NUMBERS, RAIN_METADATA_CONTRACT_ADDRESS} from '../scripts/consts.js';
+    import {
+        MAGIC_NUMBERS,
+        RAIN_METADATA_CONTRACT_ADDRESS_SEPOLIA
+    } from '../scripts/consts.js';
     import {arrayify} from 'ethers/lib/utils.js';
     import metadataContractAbi from "../contract/rainMetadata/rainMetadataAbi.json"
     import {onMount} from 'svelte';
+
+    let {signer} = $ethersData;
 
 
     let metadataContract = ""
 
     onMount(async () => {
-        metadataContract = await getContract($activeNetwork, RAIN_METADATA_CONTRACT_ADDRESS.trim(), metadataContractAbi, $ethersData.signerOrProvider)
+        metadataContract = await getContract($activeNetwork, RAIN_METADATA_CONTRACT_ADDRESS_SEPOLIA.trim(), metadataContractAbi, $ethersData.signerOrProvider)
         console.log("metadataContract", metadataContract);
     })
 
@@ -60,7 +65,8 @@
 
         console.log("concatenatedBytes", constructedMeta)
 
-
+        const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1,constructedMeta);
+        console.log(tx, metadataContract)
         //
         // let hexString = Array.prototype.map.call(constructedMeta, x => ('00' + x.toString(16)).slice(-2)).join('');
         //
@@ -74,12 +80,8 @@
         return Promise.reject("The Clipboard API is not available.");
     }
 
-    function removeAddress(address) {
+    async function removeAddress(address) {
         console.log(address)
-    }
-
-    async function remove(address) {
-
         let byteAddress = await hexToBytes(address)
         // Create a new Uint8Array with a length of 21 bytes
         let newArray = new Uint8Array(21);
@@ -99,8 +101,11 @@
 
         constructedMeta.set(rainMagic, 0);
         constructedMeta.set(cborEncoded, rainMagic.length);
+        const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1,constructedMeta);
 
         console.log("concatenatedBytes", constructedMeta)
+        let hexString = Array.prototype.map.call(constructedMeta, x => ('00' + x.toString(16)).slice(-2)).join('');
+        console.log(hexString);
 
     }
 </script>

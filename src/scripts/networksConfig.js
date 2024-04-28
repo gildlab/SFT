@@ -77,6 +77,19 @@ const networks = [
         factory_address: '0xf1A14e96977E8dE295Ba9612691D127B157d1371',
         subgraph_url: "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-sepolia"
     },
+    {
+        id: 11155111,
+        chainId: 11155111,
+        name: 'eth_sepolia',
+        displayName: "Ethereum Sepolia",
+        currencySymbol: "ETHSepolia",
+        blockExplorer: "https://sepolia.arbiscan.io/",
+        blockExplorerIcon: "etherscan",
+        rpcUrl: "https://sepolia.infura.io/v3/  ",
+        icon: 'ethereum',
+        factory_address: '0xD13c3B470989C3666A7b4994951582bA101C1EF8',
+        subgraph_url: "https://api.studio.thegraph.com/query/21739/offchainassetvault-sepolia-eth/version/latest"
+    },
     // {
     //     id: 80001,
     //     chainId: 80001,

@@ -90,6 +90,19 @@ const networks = [
         factory_address: '0xD13c3B470989C3666A7b4994951582bA101C1EF8',
         subgraph_url: "https://api.studio.thegraph.com/query/21739/offchainassetvault-sepolia-eth/version/latest"
     },
+    {
+        id: 80002,
+        chainId: 80002,
+        name: 'polygon-amoy',
+        displayName: "Polygon amoy",
+        currencySymbol: "MATIC",
+        blockExplorer: "https://amoy.polygonscan.com/",
+        blockExplorerIcon: "polygonscan",
+        rpcUrl: "https://rpc-amoy.polygon.technology",
+        icon: 'polygon',
+        factory_address: '0x486303714EB5185742acBC63F119fda3b7E637AE',
+        subgraph_url: "https://api.studio.thegraph.com/query/21739/offchainassetvault-amoy/version/latest"
+    },
     // {
     //     id: 80001,
     //     chainId: 80001,

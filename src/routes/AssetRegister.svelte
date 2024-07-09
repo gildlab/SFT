@@ -46,7 +46,8 @@
 
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
-        localStorage.setItem("selectedReceiptSchema", $selectedReceipt.schema.hash)
+        console.log("asdf",$selectedReceipt)
+        localStorage.setItem("selectedReceiptSchema", $selectedReceipt?.schema?.hash)
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${receipt.receipt.receiptInformations[0].id}`)
     }
 
@@ -102,7 +103,7 @@
           {#each filteredReceipts as receipt}
             <tr class="tb-row">
               <td class="brown hover-underline cursor-pointer receipt-{receipt.receipt.receiptId}"
-                  on:click={()=>{goToAssetInformation(receipt)}}>{receipt.receipt.receiptId}</td>
+                  on:click={()=>{goToAssetInformation(receipt)}} id="receipt-{receipt.receipt.receiptId}">{receipt.receipt.receiptId}</td>
               <td class="asset-class-cell">{receipt.schema?.displayName || ""}</td>
               <td>{ethers.utils.formatUnits(receipt.amount, 18)}</td>
               <td>{timeStampToDate(receipt.timestamp)}</td>

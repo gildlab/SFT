@@ -27,44 +27,44 @@ describe('The Home Page', () => {
         cy.get('.breadcrumbs').should('not.exist');
     });
     it('Should set token and navigate to token overview', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.url().should('include', '/#token-overview')
         cy.get('#token-overview').should('exist');
         cy.get('.navigation-token-icon').should('exist');
     });
     it('Navigates to mint', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-mint`).click();
         //There is no user logged in so it should go to ipfs login page
         cy.get('.ipfs-container').should('exist')
     });
     it('Navigates to asset-classes', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-asset-classes`).click();
         cy.url().should('include', '/#asset-classes')
     });
     it('Navigates to members', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-members`).click();
         cy.url().should('include', '/#members')
     });
     it('Navigates to roles', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-roles`).click();
         cy.url().should('include', '/#roles')
     });
     it('Navigates to audit-history', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-audit-history`).click();
         cy.url().should('include', '/#audit-history')
     });
     it('Navigates to asset-register', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-asset-register`).click();
         cy.url().should('include', '/#asset-register')
@@ -78,48 +78,48 @@ describe('The Home Page', () => {
         cy.url().should('include', '/#setup')
     });
     it('Navigates to home', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-list`).click();
         cy.url().should('include', '/#list')
         cy.get('.tokens').should('exist');
     });
     it('Sets token image as logo', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.url().should('include', '/#token-overview')
         cy.get('#token-overview').should('exist');
         cy.get('.navigation-token-icon').should('exist');
         cy.get('.token-logo').should('exist');
         cy.get('.token-logo')
             .should('have.attr', 'src')
-            .should('include', 'https://ipfs.io/ipfs/QmSaHGGYMu31evZdaJF4tuX4pVx5paBZnWWYkrN7U8Sc9k')
+            .should('include', 'https://ipfs.io/ipfs/QmWEQvhDtQSMcSEAhvnDuX4hJacqiZkKUhDizM5MS2QFfW'    )
     });
     it('Should search and filter', () => {
         cy.get(`.search-bar`).should('exist');
-        cy.get(`.token-Jefo-test`).should('exist');
-        cy.get(`.token-coca-cola`).should('exist');
-        cy.get('.search-input').type("jefo-test");
-        cy.get(`.token-coca-cola`).should('not.exist');
+        cy.get(`.token-Sepolia-test`).should('exist');
+        cy.get(`.token-New-Project`).should('exist');
+        cy.get('.search-input').type("Sepolia-test");
+        cy.get(`.token-New-Project`).should('not.exist');
     });
     it('Should clear search and show all tokens', () => {
         cy.get(`.search-bar`).should('exist');
-        cy.get(`.token-Jefo-test`).should('exist');
-        cy.get(`.token-coca-cola`).should('exist');
+        cy.get(`.token-Sepolia-test`).should('exist');
+        cy.get(`.token-New-Project`).should('exist');
         cy.get('.search-input').type("jefo");
-        cy.get(`.token-coca-cola`).should('not.exist');
+        cy.get(`.token-New-Project`).should('not.exist');
         cy.get('.search-input').clear();
-        cy.get(`.token-Jefo-test`).should('exist');
-        cy.get(`.token-coca-cola`).should('exist');
+        cy.get(`.token-Sepolia-test`).should('exist');
+        cy.get(`.token-New-Project`).should('exist');
     });
     it('Should search and filter by token address', () => {
         cy.get(`.search-bar`).should('exist');
-        cy.get(`.token-Jefo-test`).should('exist');
-        cy.get(`.token-coca-cola`).should('exist');
+        cy.get(`.token-Sepolia-test`).should('exist');
+        cy.get(`.token-New-Project`).should('exist');
         cy.get('.search-input').type("0xdbcf2d8b73d06e6fa593b98857097257ebef1951");
-        cy.get(`.token-coca-cola`).should('not.exist');
+        cy.get(`.token-New-Project`).should('not.exist');
     });
     it('Navigates to token overview', () => {
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.get(`.path-setup`).click();
         cy.get(`.sft-name`).click();
         cy.url().should('include', '/#token-overview')

@@ -92,7 +92,7 @@ describe('The Home Page', () => {
         cy.get('.token-logo').should('exist');
         cy.get('.token-logo')
             .should('have.attr', 'src')
-            .should('include', 'https://ipfs.io/ipfs/QmWEQvhDtQSMcSEAhvnDuX4hJacqiZkKUhDizM5MS2QFfW'    )
+            .should('include', 'https://ipfs.io/ipfs/QmWEQvhDtQSMcSEAhvnDuX4hJacqiZkKUhDizM5MS2QFfW')
     });
     it('Should search and filter', () => {
         cy.get(`.search-bar`).should('exist');

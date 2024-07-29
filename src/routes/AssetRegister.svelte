@@ -46,7 +46,6 @@
 
     function goToAssetInformation(receipt) {
         selectedReceipt.set(receipt)
-        console.log("asdf", $selectedReceipt)
         localStorage.setItem("selectedReceiptSchema", $selectedReceipt?.schema?.hash)
         navigate(`#asset-information/${$selectedReceipt.receipt.receiptId}/${receipt.receipt.receiptInformations[0].id}`)
     }

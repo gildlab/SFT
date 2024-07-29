@@ -30,7 +30,8 @@
         <img class="link-icon" src={icons.web_brown} alt="web"></a>{/if}
   {/if}
   <a href={`${$activeNetwork?.blockExplorer}/address/${sft.address}`} target="_blank">
-    <img class="link-icon" src={icons[$activeNetwork.blockExplorerIcon]} alt={$activeNetwork.blockExplorerIcon} width="24" height="24">
+    <img class="link-icon" src={icons[$activeNetwork?.blockExplorerIcon]} alt={$activeNetwork?.blockExplorerIcon}
+         width="24" height="24">
   </a>
   {#if sft?.deployer?.toLowerCase() === $account.toLowerCase()}
     <img class="link-icon edit" src={icons.edit} alt="edit" on:click={handleEditClick}>

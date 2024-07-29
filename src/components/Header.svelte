@@ -2,6 +2,7 @@
     import {account, activeNetwork, isCypress, isMetamaskInstalled, pageTitle, titleIcon} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
+    import networksV2 from "../scripts/networksConfigV2.js";
     import {createEventDispatcher, onMount} from "svelte";
     import {formatAddress, connectAccount} from "../scripts/helpers.js";
     import HeaderDropdown from './HeaderDropdown.svelte';
@@ -10,25 +11,25 @@
     export let location;
 
 
-    onMount(()=>{
-        isCypress.set(!!window.Cypress)
+    onMount(() => {
+            isCypress.set(!!window.Cypress)
 
-        if ($isCypress) {
-            account.set('0xc0d477556c25c9d67e1f57245c7453da776b51cf')
-            activeNetwork.set({
-                "id": 80001,
-                "chainId": 80001,
-                "name": "mumbai",
-                "displayName": "Mumbai testnet",
-                "currencySymbol": "MATIC",
-                "blockExplorer": "https://mumbai.polygonscan.com",
-                "blockExplorerIcon": "polygonscan",
-                "rpcUrl": "https://rpc-mumbai.maticvigil.com/",
-                "icon": "polygon",
-                "factory_address": "0x94927792b88D518f9a429572dD3D40400b8BE906",
-                "subgraph_url": "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
-            })
-        }
+            if ($isCypress) {
+                account.set('0xc0d477556c25c9d67e1f57245c7453da776b51cf')
+                activeNetwork.set({
+                    "id": 80001,
+                    "chainId": 80001,
+                    "name": "mumbai",
+                    "displayName": "Mumbai testnet",
+                    "currencySymbol": "MATIC",
+                    "blockExplorer": "https://mumbai.polygonscan.com",
+                    "blockExplorerIcon": "polygonscan",
+                    "rpcUrl": "https://rpc-mumbai.maticvigil.com/",
+                    "icon": "polygon",
+                    "factory_address": "0x94927792b88D518f9a429572dD3D40400b8BE906",
+                    "subgraph_url": "https://api.thegraph.com/subgraphs/name/gildlab/offchainassetvault-mumbai"
+                })
+            }
         }
     )
     let accountMenuOptions = [
@@ -56,6 +57,7 @@
             class: 'underline',
         }
     ]
+    $: AllNetworks = [...networks, ...networksV2];
 
     const dispatch = createEventDispatcher();
 
@@ -87,7 +89,7 @@
     <div class="flex justify-end w-1/3 whitespace-nowrap items-center">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} id="networks-dropdown"
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
-                      items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
+                      items={AllNetworks} on:select={handleNetworkSelect}></HeaderDropdown>
       {#if $account}
         <HeaderDropdown triggerLabel={formatAddress($account)} id="account-dropdown"
                         items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">

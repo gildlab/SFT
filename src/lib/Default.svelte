@@ -78,6 +78,7 @@
     import Issuers from '../routes/Issuers.svelte';
     import Curators from '../routes/Curators.svelte';
     import Auditors from '../routes/Auditors.svelte';
+    import networksV2 from '../scripts/networksConfigV2.js';
 
     let connectedAccount;
     export let url = "";
@@ -88,6 +89,7 @@
     let selectedTab = "#mint";
     $: $vault.address && vaultChanged();
     $: $account, accountChanged()
+    $: AllNetworks = [...networks, ...networksV2];
 
     async function vaultChanged() {
         if ($vault.address && $activeNetwork.id) {
@@ -262,7 +264,7 @@
     async function setNetwork() {
         let network = await $ethersData.provider.getNetwork();
         let connectedChainId = parseInt(network.chainId);
-        let temp = networks.find(
+        let temp = AllNetworks.find(
             (network) => network.chainId === connectedChainId
         );
         activeNetwork.set(temp);

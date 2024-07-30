@@ -3,7 +3,7 @@ const networksV2 = [
         id: 8453,
         chainId: 8453,
         name: 'base',
-        displayName: "Base",
+        displayName: "Base mainnet",
         currencySymbol: "ETH",
         blockExplorer: "https://basescan.org/",
         blockExplorerIcon: "etherscan",

@@ -7,6 +7,7 @@
         vault, titleIcon, account
     } from '../scripts/store.js';
     import {ethers} from "ethers";
+    import cloneFactoryAbi from "../contract/CloneFactory.json";
     import contractFactoryAbi from "../contract/OffchainAssetVaultFactoryAbi.json"
     import contractAbi from "../contract/OffchainAssetVaultAbi.json"
     import {
@@ -20,9 +21,10 @@
         getEvent,
         showPromptSFTCreate
     } from "../scripts/helpers.js";
-    import {onDestroy, onMount} from 'svelte';
+    import {onMount} from 'svelte';
     import {icons} from "../scripts/assets.js"
     import Connect from '../components/Connect.svelte';
+    import networksV2 from '../scripts/networksConfigV2.js';
 
     let name = "";
     let admin_ledger = "";
@@ -71,9 +73,46 @@
         try {
             factoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, contractFactoryAbi, signerOrProvider)
 
-            offChainAssetVaultTx = await factoryContract.createChildTyped(
-                constructionConfig
-            )
+            // if new contract
+            if ($activeNetwork.id && networksV2.some(element => element.id === $activeNetwork.id)) {
+                let cloneFactoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, cloneFactoryAbi, signerOrProvider)
+                const offchainAssetVaultConfig = {
+                    admin: admin_ledger.trim(),
+                    vaultConfig: {
+                        asset: ADDRESS_ZERO,
+                        name: name,
+                        symbol: symbol
+                    }
+                };
+                // Encode the initialization data
+                let encodedVaultConfig = ethers.utils.defaultAbiCoder.encode(
+                    [
+                        {
+                            type: 'tuple',
+                            components: [
+                                {type: 'address', name: 'admin'},
+                                {
+                                    type: 'tuple',
+                                    name: 'vaultConfig',
+                                    components: [
+                                        {type: 'address', name: 'asset'},
+                                        {type: 'string', name: 'name'},
+                                        {type: 'string', name: 'symbol'}
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    [offchainAssetVaultConfig]
+                );
+
+                offChainAssetVaultTx = await cloneFactoryContract.clone($activeNetwork.implementation_address, encodedVaultConfig);
+            } else {
+                offChainAssetVaultTx = await factoryContract.createChildTyped(
+                    constructionConfig
+                )
+            }
+            return;
 
             await showPromptSFTCreate(offChainAssetVaultTx)
 
@@ -117,7 +156,7 @@
             }
 
         } catch (er) {
-            console.log(er.message || er.message)
+            console.log("error: ", er.message)
         }
         loading = false
     }

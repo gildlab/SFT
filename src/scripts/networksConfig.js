@@ -49,7 +49,7 @@ const networks = [
         rpcUrl: "https://rpc-amoy.polygon.technology",
         icon: 'polygon',
         factory_address: '0x486303714EB5185742acBC63F119fda3b7E637AE',
-        subgraph_url: "https://api.studio.thegraph.com/query/21739/offchainassetvault-amoy/version/latest"
+        subgraph_url: "https://api.goldsky.com/api/public/project_clv14x04y9kzi01saerx7bxpg/subgraphs/sft-offchainassetvault-polygon-amoy/1.0.0/gn"
     },
     {
         id: 42161,

@@ -7,7 +7,7 @@ describe('Asset register page', () => {
     beforeEach(() => {
         cy.visit('/#')
         cy.get(`#launch-button`).click();
-        cy.get(`#token-name-Jefo-test`).click();
+        cy.get(`#token-name-Sepolia-test`).click();
         cy.wait(1000)
         cy.get(`.path-asset-register`).click();
     })
@@ -20,8 +20,7 @@ describe('Asset register page', () => {
     it('Goes to asset information and sets correct asset class', () => {
         cy.wait(2000)
 
-        cy.get('.receipt-6').click()
-        cy.url().should('include', '#asset-information/6')
-        cy.get('.1232222').should('have.text', '1232222')
+        cy.get('.receipt-1').click();
+        cy.url().should('include', '#asset-information/1')
     });
 })

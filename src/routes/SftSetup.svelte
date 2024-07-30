@@ -35,6 +35,7 @@
     export let ethersData;
     let {signer, signerOrProvider, provider} = ethersData;
     let factoryContract;
+    let cloneFactoryContract;
 
     onMount(() => {
         pageTitle.set("Setup new SFT")
@@ -75,7 +76,7 @@
 
             // if new contract
             if ($activeNetwork.id && networksV2.some(element => element.id === $activeNetwork.id)) {
-                let cloneFactoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, cloneFactoryAbi, signerOrProvider)
+                cloneFactoryContract = await getContract($activeNetwork, $activeNetwork.factory_address, cloneFactoryAbi, signerOrProvider)
                 const offchainAssetVaultConfig = {
                     admin: admin_ledger.trim(),
                     vaultConfig: {
@@ -112,22 +113,38 @@
                     constructionConfig
                 )
             }
-            return;
 
             await showPromptSFTCreate(offChainAssetVaultTx)
 
-            let eventArgs = await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)
+            let eventArgs;
             let contract;
-            contract = new ethers.Contract(
-                ethers.utils.hexZeroPad(
-                    ethers.utils.hexStripZeros(
-                        (eventArgs).child
+
+            if ($activeNetwork.id && networksV2.some(element => element.id === $activeNetwork.id)) {
+                eventArgs = await getEventArgs(offChainAssetVaultTx, "NewClone", cloneFactoryContract)
+                contract = new ethers.Contract(
+                    ethers.utils.hexZeroPad(
+                        ethers.utils.hexStripZeros(
+                            (eventArgs).clone
+                        ),
+                        20
                     ),
-                    20
-                ),
-                contractAbi,
-                signer.address
-            );
+                    cloneFactoryAbi,
+                    signer.address
+                );
+            } else {
+                eventArgs = await getEventArgs(offChainAssetVaultTx, "NewChild", factoryContract)
+                contract = new ethers.Contract(
+                    ethers.utils.hexZeroPad(
+                        ethers.utils.hexStripZeros(
+                            (eventArgs).child
+                        ),
+                        20
+                    ),
+                    contractAbi,
+                    signer.address
+                );
+            }
+
 
             console.log("vault deployed to:", contract.address);
 

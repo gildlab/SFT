@@ -329,6 +329,7 @@
         overflow: hidden;
         padding: 14px 20px 20px 20px;
         height: 100vh;
+        width: calc(100% - 243px);
     }
 
     .content {

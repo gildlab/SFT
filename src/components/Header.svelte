@@ -2,6 +2,7 @@
     import {account, activeNetwork, isCypress, isMetamaskInstalled, pageTitle, titleIcon} from "../scripts/store.js";
     import {icons} from "../scripts/assets.js";
     import networks from "../scripts/networksConfig.js";
+    import networksV2 from "../scripts/networksConfigV2.js";
     import {createEventDispatcher, onMount} from "svelte";
     import {formatAddress, connectAccount} from "../scripts/helpers.js";
     import HeaderDropdown from './HeaderDropdown.svelte';
@@ -44,6 +45,7 @@
             class: 'underline',
         }
     ]
+    $: AllNetworks = [...networks, ...networksV2];
 
     const dispatch = createEventDispatcher();
 
@@ -75,7 +77,7 @@
     <div class="flex justify-end w-1/3 whitespace-nowrap items-center">
       <HeaderDropdown triggerIcon={icons[$activeNetwork?.icon]} id="networks-dropdown"
                       triggerLabel={$activeNetwork?.displayName  || 'Supported networks'}
-                      items={networks} on:select={handleNetworkSelect}></HeaderDropdown>
+                      items={AllNetworks} on:select={handleNetworkSelect}></HeaderDropdown>
       {#if $account}
         <HeaderDropdown triggerLabel={formatAddress($account)} id="account-dropdown"
                         items={accountMenuOptions} on:select={handleAccountMenuOptionsSelect} triggerIcon="">

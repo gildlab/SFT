@@ -134,4 +134,8 @@ describe('The Home Page', () => {
         cy.get(`#networks-dropdown`).click();
         cy.get('#sepolia').should('exist')
     });
+    it('Should check base mainnet is in the menu', () => {
+        cy.get(`#networks-dropdown`).click();
+        cy.get('#base').should('exist')
+    });
 })

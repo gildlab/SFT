@@ -1,6 +1,9 @@
 <script>
-    import {account, activeNetwork, ethersData, sftInfo} from "../scripts/store";
-    import {getContract, timeStampToDate} from "../scripts/helpers.js";
+    import { activeNetwork, ethersData, sftInfo} from "../scripts/store";
+    import {
+        cborDecode,
+        getContract,
+    } from "../scripts/helpers.js";
     import SftLoader from '../components/SftLoader.svelte';
     import {icons} from '../scripts/assets.js';
     import {encodeAddresses, hexToBytes, initWasm} from "../wasm_utils.js";
@@ -11,15 +14,17 @@
     import {arrayify} from 'ethers/lib/utils.js';
     import metadataContractAbi from "../contract/rainMetadata/rainMetadataAbi.json"
     import {onMount} from 'svelte';
+    import networks from '../scripts/networksConfig.js';
 
     let {signer} = $ethersData;
 
 
-    let metadataContract = ""
+    let metadataContract = "";
+    let addresses = [];
 
     onMount(async () => {
         metadataContract = await getContract($activeNetwork, RAIN_METADATA_CONTRACT_ADDRESS_SEPOLIA.trim(), metadataContractAbi, $ethersData.signerOrProvider)
-        console.log("metadataContract", metadataContract);
+        await getAddresses();
     })
 
     async function cborEncodeAddress(addresses) {
@@ -27,17 +32,60 @@
         return await encodeAddresses(addresses);
     }
 
+    async function getAddresses() {
+
+        let query = `
+          query($sender: String!) {
+            metaV1S(where: { sender: $sender }) {
+              meta
+              sender
+            }
+          }
+         `;
+
+        let data = {};
+        let variables = {sender: "0xc0D477556c25C9d67E1f57245C7453DA776B51cf".toLowerCase()}
+        try {
+            let req = await fetch(networks.find(n => n.chainId === 421614).addresses_subgraph_url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    query,
+                    variables
+                })
+            })
+
+            data = await req.json()
+
+            if (data) {
+                let tempData = data.data;
+
+                if (tempData.metaV1S?.length > 0) {
+                    addresses = tempData.metaV1S.map(item => {
+                            // return
+                            let decoded = cborDecode(item.meta.slice(18));
+                            let myArray = decoded[0].get(0);
+                            //Remove added first byte
+                            let newArray = myArray.subarray(1);
+                            // Convert Uint8Array to hex string
+                            let hexString = Array.from(newArray)
+                                .map(byte => byte.toString(16).padStart(2, '0'))
+                                .join('');
+
+                            let ethAddress = '0x' + hexString;
+                            return {address:ethAddress, sender: item.sender};
+                        }
+                    );
+                }
+            }
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
     let error = ''
-    let addresses = [
-        {address: "0x8058ad7c22fdc8788fe4cb1dac15d6e976127324", timestamp: "1710922144"},
-        {address: "0xc0D477556c25C9d67E1f57245C7453DA776B51cf", timestamp: "1710922144"},
-        {address: "0x6E37d34e35a5fF2f896eD9e76EC43e728adA1d18", timestamp: "1710922144"},
-        {address: "0x2cb21fb0a2cebb57434b1a2b89c81e5f49cd484a", timestamp: "1710922144"},
-        {address: "0xaa1decefc2b32ca6390c9773e4ecffe69a644ff7", timestamp: "1710922144"},
-        {address: "0x627a12ce1f6d42c9305e03e83fe044e8c3c1a32c", timestamp: "1710922144"},
-        {address: "0xbe14c8f33239db9699422b37f09aa86d93bb8ff6", timestamp: "1710922144"},
-        {address: "0xbaa3e3dd6eeebf87af39fc35eeccdf12537db515", timestamp: "1710922144"},
-    ]
     let loading = false;
     let address = '';
 
@@ -63,10 +111,10 @@
         constructedMeta.set(rainMagic, 0);
         constructedMeta.set(cborEncoded, rainMagic.length);
 
-        console.log("concatenatedBytes", constructedMeta)
+        const textDecoder = new TextDecoder();
+        const str = textDecoder.decode(constructedMeta);
 
-        const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1,constructedMeta);
-        console.log(tx, metadataContract)
+        const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1, constructedMeta);
         //
         // let hexString = Array.prototype.map.call(constructedMeta, x => ('00' + x.toString(16)).slice(-2)).join('');
         //
@@ -101,7 +149,7 @@
 
         constructedMeta.set(rainMagic, 0);
         constructedMeta.set(cborEncoded, rainMagic.length);
-        const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1,constructedMeta);
+        const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1, constructedMeta);
 
         console.log("concatenatedBytes", constructedMeta)
         let hexString = Array.prototype.map.call(constructedMeta, x => ('00' + x.toString(16)).slice(-2)).join('');
@@ -129,7 +177,7 @@
         <tr>
           <th></th>
           <th>Current addresses</th>
-          <th class="rounded-tr-[10px]">Date added</th>
+          <th class="rounded-tr-[10px]">Sender</th>
           <th class="!bg-white"></th>
         </tr>
         </thead>
@@ -142,7 +190,7 @@
                 <img class="ml-5" src="{icons.copy_brown}" alt="copy">
               </td>
               <td class="address flex">{ad.address.toLowerCase()}</td>
-              <td>{timeStampToDate(ad?.timestamp, "yy-mm-dd/tt:tt")}</td>
+              <td>{ad?.sender}</td>
               <td class="bg-white border-0" on:click={()=>{removeAddress(ad.address)}}>
                 <img class="ml-2 cursor-pointer hover:opacity-50" src="{icons.bin}" alt="copy">
               </td>

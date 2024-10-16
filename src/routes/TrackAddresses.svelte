@@ -65,8 +65,7 @@
                 let tempData = data.data;
 
                 if (tempData.metaV1S?.length > 0) {
-                    addresses = tempData.metaV1S.map(item => {
-                            // return
+                    let tempAddresses = tempData.metaV1S.map(item => {
                             let decoded = cborDecode(item.meta.slice(18));
                             let myArray = decoded[0].get(0);
                             //Remove added first byte
@@ -79,6 +78,10 @@
                             let ethAddress = '0x' + hexString;
                             return {address:ethAddress, sender: item.sender};
                         }
+                    );
+
+                    addresses = tempAddresses.filter((item, index, self) =>
+                        index === self.findIndex((t) => t.address === item.address)
                     );
                 }
             }

@@ -33,6 +33,8 @@
     }
 
     async function getAddresses() {
+        const managerAddress = import.meta.env.VITE_MANAGER_ADDRESS;
+        const addresses_subgraph_url = import.meta.env.VITE_ADDRESSES_SUBGRAPH_URL;
 
         let query = `
           query($sender: String!) {
@@ -44,9 +46,9 @@
          `;
 
         let data = {};
-        let variables = {sender: "0xc0D477556c25C9d67E1f57245C7453DA776B51cf".toLowerCase()}
+        let variables = {sender: managerAddress.toLowerCase()}
         try {
-            let req = await fetch(networks.find(n => n.chainId === 421614).addresses_subgraph_url, {
+            let req = await fetch(addresses_subgraph_url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

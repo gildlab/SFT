@@ -63,7 +63,6 @@ const networks = [
         icon: 'arbitrum',
         factory_address: '0xf1A14e96977E8dE295Ba9612691D127B157d1371',
         subgraph_url: "https://api.goldsky.com/api/public/project_clv14x04y9kzi01saerx7bxpg/subgraphs/sft-offchainassetvault-arbitrum-sepolia/1.0.0/gn",
-        addresses_subgraph_url: "https://api.goldsky.com/api/public/project_clycy1691w08b01z43sljeooc/subgraphs/metaBoard-arb-sepolia/1.0.0/gn"
     }
 ];
 

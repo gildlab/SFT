@@ -91,8 +91,16 @@
     }
 
     let error = ''
+    let addressFound = false;
     let loading = false;
     let address = '';
+    $: address && checkAddress();
+
+    function checkAddress() {
+        if(address){
+            addressFound = !!addresses.find(a=>a.address === address)
+        }
+    }
 
     async function addAddress() {
         let byteAddress = await hexToBytes(address)
@@ -173,7 +181,8 @@
         <span>Add an address to track IPFS pins from</span>
         <div class="flex gap-5 w-full">
           <input class="default-input w-1/2" bind:value={address}/>
-          <button class="default-btn" on:click={()=>{addAddress()}}> Add address</button>
+          <button class="default-btn" on:click={()=>{addAddress()}} disabled={addressFound}> Add address</button>
+          {#if addressFound}<div class="error">Address already added</div>{/if}
         </div>
       </div>
       <span class="self-start">Current Addresses to track IPFS pins from</span>

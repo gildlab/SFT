@@ -1,8 +1,15 @@
 <script>
-    import { activeNetwork, ethersData, sftInfo} from "../scripts/store";
+    import {
+        account,
+        activeNetwork,
+        ethersData,
+        sftInfo, transactionError,
+        transactionInProgress,
+        transactionSuccess
+    } from "../scripts/store";
     import {
         cborDecode,
-        getContract,
+        getContract, showPrompt,
     } from "../scripts/helpers.js";
     import SftLoader from '../components/SftLoader.svelte';
     import {icons} from '../scripts/assets.js';
@@ -14,10 +21,8 @@
     import {arrayify} from 'ethers/lib/utils.js';
     import metadataContractAbi from "../contract/rainMetadata/rainMetadataAbi.json"
     import {onMount} from 'svelte';
-    import networks from '../scripts/networksConfig.js';
 
     let {signer} = $ethersData;
-
 
     let metadataContract = "";
     let addresses = [];
@@ -76,7 +81,7 @@
                                 .join('');
 
                             let ethAddress = '0x' + hexString;
-                            return {address:ethAddress, sender: item.sender};
+                            return {address: ethAddress, sender: item.sender};
                         }
                     );
 
@@ -97,12 +102,16 @@
     $: address && checkAddress();
 
     function checkAddress() {
-        if(address){
-            addressFound = !!addresses.find(a=>a.address === address)
+        if (address) {
+            addressFound = !!addresses.find(a => a.address === address)
         }
     }
 
     async function addAddress() {
+
+        if (addressFound) {
+            return;
+        }
         let byteAddress = await hexToBytes(address)
 
         // Create a new Uint8Array with a length of 21 bytes
@@ -124,14 +133,18 @@
         constructedMeta.set(rainMagic, 0);
         constructedMeta.set(cborEncoded, rainMagic.length);
 
-        const textDecoder = new TextDecoder();
-        const str = textDecoder.decode(constructedMeta);
+        let tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1, constructedMeta);
+        await showPrompt(tx)
 
-        const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1, constructedMeta);
-        //
-        // let hexString = Array.prototype.map.call(constructedMeta, x => ('00' + x.toString(16)).slice(-2)).join('');
-        //
-        // console.log(hexString); // Output: "68656c6c6f"
+        let wait = await tx.wait()
+        if (wait.status === 1) {
+            addresses = [...addresses, {address: address, sender: $account}];
+            transactionSuccess.set(true)
+            transactionInProgress.set(false)
+        } else {
+            transactionError.set(true)
+        }
+
     }
 
     function copyAddress(address) {
@@ -182,7 +195,9 @@
         <div class="flex gap-5 w-full">
           <input class="default-input w-1/2" bind:value={address}/>
           <button class="default-btn" on:click={()=>{addAddress()}} disabled={addressFound}> Add address</button>
-          {#if addressFound}<div class="error">Address already added</div>{/if}
+          {#if addressFound}
+            <div class="error">Address already added</div>
+          {/if}
         </div>
       </div>
       <span class="self-start">Current Addresses to track IPFS pins from</span>

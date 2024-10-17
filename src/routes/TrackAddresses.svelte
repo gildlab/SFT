@@ -38,8 +38,6 @@
     }
 
     async function getAddresses() {
-
-        //TODO Filter addresses that were deleted
         const managerAddress = import.meta.env.VITE_MANAGER_ADDRESS;
         const addresses_subgraph_url = import.meta.env.VITE_ADDRESSES_SUBGRAPH_URL;
 

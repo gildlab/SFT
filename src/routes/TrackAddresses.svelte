@@ -38,6 +38,8 @@
     }
 
     async function getAddresses() {
+
+        //TODO Filter addresses that were deleted
         const managerAddress = import.meta.env.VITE_MANAGER_ADDRESS;
         const addresses_subgraph_url = import.meta.env.VITE_ADDRESSES_SUBGRAPH_URL;
 
@@ -155,7 +157,6 @@
     }
 
     async function removeAddress(address) {
-        console.log(address)
         let byteAddress = await hexToBytes(address)
         // Create a new Uint8Array with a length of 21 bytes
         let newArray = new Uint8Array(21);
@@ -176,11 +177,14 @@
         constructedMeta.set(rainMagic, 0);
         constructedMeta.set(cborEncoded, rainMagic.length);
         const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1, constructedMeta);
-
-        console.log("concatenatedBytes", constructedMeta)
-        let hexString = Array.prototype.map.call(constructedMeta, x => ('00' + x.toString(16)).slice(-2)).join('');
-        console.log(hexString);
-
+        let wait = await tx.wait()
+        if (wait.status === 1) {
+            addresses = addresses.filter(a=>a.address !== address);
+            transactionSuccess.set(true)
+            transactionInProgress.set(false)
+        } else {
+            transactionError.set(true)
+        }
     }
 </script>
 

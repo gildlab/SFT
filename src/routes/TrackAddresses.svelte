@@ -32,6 +32,38 @@
         await getAddresses();
     })
 
+    function processAddresses(metaData) {
+        const addressActions = {};
+
+        // Traverse the meta data to process each add/remove action
+        metaData.forEach(item => {
+            const decoded = cborDecode(item.meta.slice(18)); // Decode the meta data
+            const myArray = decoded[0].get(0);
+
+            const actionPrefix = myArray[0]; // 0 for remove, 1 for add
+            const addressHex = arrayToHex(myArray.subarray(1)); // Extract the address
+
+            // Track the last action for each address (1 for add, 0 for remove) along with the sender
+            addressActions[addressHex] = {action: actionPrefix, sender: item.sender};
+        });
+
+        // Collect addresses that were added (1) and not subsequently removed (0)
+        return Object.keys(addressActions)
+            .filter(address => addressActions[address].action === 1)
+            .map(address => ({
+                address: address,
+                sender: addressActions[address].sender
+            }));
+    }
+
+
+    // Helper function to convert Uint8Array to a hex string
+    function arrayToHex(uint8Array) {
+        return '0x' + Array.from(uint8Array)
+            .map(byte => byte.toString(16).padStart(2, '0'))
+            .join('');
+    }
+
     async function cborEncodeAddress(addresses) {
         await initWasm();
         return await encodeAddresses(addresses);
@@ -70,45 +102,7 @@
                 let tempData = data.data;
 
                 if (tempData.metaV1S?.length > 0) {
-                    let removedAddresses = [];
-                    let tempAddresses = tempData.metaV1S.reduce((acc, item) => {
-                        let decoded = cborDecode(item.meta.slice(18));
-                        let myArray = decoded[0].get(0);
-
-                        // Check if myArray[0] === 0; if true, skip this item
-                        if (myArray[0] === 0) {
-                            let newArray = myArray.subarray(1);
-
-                            // Save removed address
-                            removedAddresses.push('0x' + Array.from(newArray)
-                                .map(byte => byte.toString(16).padStart(2, '0'))
-                                .join(''));
-                            return acc; // Skip this element
-                        }
-
-                        // Remove added first byte
-                        let newArray = myArray.subarray(1);
-
-                        // Convert Uint8Array to hex string
-                        let hexString = Array.from(newArray)
-                            .map(byte => byte.toString(16).padStart(2, '0'))
-                            .join('');
-
-                        // Construct Ethereum address
-                        let ethAddress = '0x' + hexString;
-
-                        // Add the transformed object to the accumulator
-                        acc.push({address: ethAddress, sender: item.sender});
-
-                        return acc;  // Return the updated accumulator
-                    }, []);  // Start with an empty array as the accumulator
-
-                    // Unique addresses
-                    tempAddresses = tempAddresses.filter((item, index, self) =>
-                        index === self.findIndex((t) => t.address === item.address)
-                    );
-                    addresses = tempAddresses.filter(item => !removedAddresses.includes(item.address))
-
+                    addresses = processAddresses(tempData.metaV1S);
                 }
             }
         } catch (e) {
@@ -241,19 +235,15 @@
               <td class="cursor-pointer hover:opacity-50" on:click={()=>{copyAddress(ad.address)}}>
                 <img class="ml-5" src="{icons.copy_brown}" alt="copy">
               </td>
-              <td class="address flex">{ad.address.toLowerCase()}</td>
-              <td>{ad?.sender}</td>
+              <td class="address flex">{ad?.address?.toLowerCase()}</td>
+              <td>{ad?.sender?.toLowerCase()}</td>
               <td class="bg-white border-0" on:click={()=>{removeAddress(ad.address)}}>
                 <img class="ml-2 cursor-pointer hover:opacity-50" src="{icons.bin}" alt="copy">
               </td>
-
             </tr>
           {/each}
         {/if}
-
         </tbody>
-
-
       </table>
     </div>
   {/if}

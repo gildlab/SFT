@@ -72,24 +72,45 @@
                 let tempData = data.data;
 
                 if (tempData.metaV1S?.length > 0) {
-                    let tempAddresses = tempData.metaV1S.map(item => {
-                            let decoded = cborDecode(item.meta.slice(18));
-                            let myArray = decoded[0].get(0);
-                            //Remove added first byte
+                    let removedAddresses = [];
+                    let tempAddresses = tempData.metaV1S.reduce((acc, item) => {
+                        let decoded = cborDecode(item.meta.slice(18));
+                        let myArray = decoded[0].get(0);
+
+                        // Check if myArray[0] === 0; if true, skip this item
+                        if (myArray[0] === 0) {
                             let newArray = myArray.subarray(1);
-                            // Convert Uint8Array to hex string
-                            let hexString = Array.from(newArray)
+
+                            // Save removed address
+                            removedAddresses.push('0x' + Array.from(newArray)
                                 .map(byte => byte.toString(16).padStart(2, '0'))
-                                .join('');
-
-                            let ethAddress = '0x' + hexString;
-                            return {address: ethAddress, sender: item.sender};
+                                .join(''));
+                            return acc; // Skip this element
                         }
-                    );
 
-                    addresses = tempAddresses.filter((item, index, self) =>
+                        // Remove added first byte
+                        let newArray = myArray.subarray(1);
+
+                        // Convert Uint8Array to hex string
+                        let hexString = Array.from(newArray)
+                            .map(byte => byte.toString(16).padStart(2, '0'))
+                            .join('');
+
+                        // Construct Ethereum address
+                        let ethAddress = '0x' + hexString;
+
+                        // Add the transformed object to the accumulator
+                        acc.push({address: ethAddress, sender: item.sender});
+
+                        return acc;  // Return the updated accumulator
+                    }, []);  // Start with an empty array as the accumulator
+
+                    // Unique addresses
+                    tempAddresses = tempAddresses.filter((item, index, self) =>
                         index === self.findIndex((t) => t.address === item.address)
                     );
+                    addresses = tempAddresses.filter(item => !removedAddresses.includes(item.address))
+
                 }
             }
         } catch (e) {
@@ -179,7 +200,7 @@
         const tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1, constructedMeta);
         let wait = await tx.wait()
         if (wait.status === 1) {
-            addresses = addresses.filter(a=>a.address !== address);
+            addresses = addresses.filter(a => a.address !== address);
             transactionSuccess.set(true)
             transactionInProgress.set(false)
         } else {

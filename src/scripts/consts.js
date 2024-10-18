@@ -92,4 +92,4 @@ export const ROUTE_LABEL_MAP = new Map([
 export const landingPages = ['', '/', '#', '#transparency', '#investors', '#issuers', '#curators', '#auditors']
 
 export const RAIN_METADATA_CONTRACT_ADDRESS = "0x441f7AF49387295638Eec40577dB67dc5776c683"
-export const RAIN_METADATA_CONTRACT_ADDRESS_SEPOLIA = "0x8F61d274aaB5D8CFD82dc266529EAe33020386a9"
+export const RAIN_METADATA_CONTRACT_ADDRESS_SEPOLIA = "0xb1d6D10561D4e1792A7c6B336b0529e4bFb5Ea8F"

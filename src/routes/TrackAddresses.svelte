@@ -147,8 +147,8 @@
 
         constructedMeta.set(rainMagic, 0);
         constructedMeta.set(cborEncoded, rainMagic.length);
-
-        let tx = await metadataContract.connect(signer)["emitMeta(uint256,bytes)"](1, constructedMeta);
+        let subject = "0x0000000000000000000000000000000000000000000000000000000000000001"
+        let tx = await metadataContract.connect(signer)["emitMeta(bytes32,bytes)"](subject, constructedMeta);
         await showPrompt(tx)
 
         let wait = await tx.wait()
